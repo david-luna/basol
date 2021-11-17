@@ -9,23 +9,23 @@ import { OperatorFunction } from "../types";
  * @returns function
  */
 export function map<T, R>(project: (value: T) => R): OperatorFunction<T, R> {
-    return (source: Observable<T>): Observable<R> => {
-        return new Observable<R>(observer => {
-            const sourceSubscription = source.subscribe({
-                next: (value) => {
-                    observer.next(project(value));
-                },
-                error: (err) => {
-                    observer.error(err);
-                },
-                complete: () => {
-                    observer.complete();
-                }
-            });
+  return (source: Observable<T>): Observable<R> => {
+    return new Observable<R>(observer => {
+      const sourceSubscription = source.subscribe({
+        next: (value) => {
+          observer.next(project(value));
+        },
+        error: (err) => {
+          observer.error(err);
+        },
+        complete: () => {
+          observer.complete();
+        }
+      });
 
-            return () => {
-                return sourceSubscription.unsubscribe();
-            };
-        });
-    };
+      return () => {
+        return sourceSubscription.unsubscribe();
+      };
+    });
+  };
 }

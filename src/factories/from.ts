@@ -2,15 +2,15 @@ import { Observable } from "../observable";
 import { ObservableInput } from "../types";
 
 const isPromiseLike = function isPromiseLike(target: any): target is PromiseLike<unknown> {
-    return typeof target?.then === "function";
+  return typeof target?.then === "function";
 };
 
 const isArrayLike = function isArrayLike(target: any): target is ArrayLike<unknown> {
-    return typeof target?.length === "number";
+  return typeof target?.length === "number";
 };
 
 const isObservable = function isObservable(target: any): target is Observable<unknown> {
-    return typeof target?.subscribe === "function";
+  return typeof target?.subscribe === "function";
 };
 
 
@@ -21,17 +21,17 @@ const isObservable = function isObservable(target: any): target is Observable<un
  * @returns observable
  */
 function fromPromise<T>(promise: PromiseLike<T>): Observable<T> {
-    return new Observable<T>((observer) => {
-        promise.then(
-            (value: T) => {
-                observer.next(value);
-                observer.complete();
-            },
-            (error: unknown) => {
-                observer.error(error);
-            }
-        );
-    });
+  return new Observable<T>((observer) => {
+    promise.then(
+      (value: T) => {
+        observer.next(value);
+        observer.complete();
+      },
+      (error: unknown) => {
+        observer.error(error);
+      }
+    );
+  });
 }
 
 /**
@@ -41,12 +41,12 @@ function fromPromise<T>(promise: PromiseLike<T>): Observable<T> {
  * @returns observable
  */
 function fromArray<T>(array: ArrayLike<T>): Observable<T> {
-    return new Observable<T>((observer) => {
-        for (let i = 0; i < array.length; i++) {
-            observer.next(array[i]);
-        }
-        observer.complete();
-    });
+  return new Observable<T>((observer) => {
+    for (let i = 0; i < array.length; i++) {
+      observer.next(array[i]);
+    }
+    observer.complete();
+  });
 }
 
 
@@ -57,18 +57,18 @@ function fromArray<T>(array: ArrayLike<T>): Observable<T> {
  * @returns observable
  */
 export function from<T>(input: ObservableInput<T>): Observable<T> {
-    if (isPromiseLike(input)) {
-        return fromPromise(input);
-    }
+  if (isPromiseLike(input)) {
+    return fromPromise(input);
+  }
 
-    if (isArrayLike(input)) {
-        return fromArray(input);
-    }
+  if (isArrayLike(input)) {
+    return fromArray(input);
+  }
 
-    if (isObservable(input)) {
-        return input;
-    }
+  if (isObservable(input)) {
+    return input;
+  }
 
-    // Throw if not recognized
-    throw new Error("cannot create an observable for the given input");
+  // Throw if not recognized
+  throw new Error("cannot create an observable for the given input");
 }

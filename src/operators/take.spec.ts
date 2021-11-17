@@ -4,106 +4,106 @@ import { take } from "./take";
 
 
 describe("take operator", () => {
-    let nextTrigger: (num: number) => void;
-    let errorTrigger: (err: any) => void;
-    let completeTrigger: () => void;
-    const tearDownSpy = jest.fn();
-    const sourceNumbers = new Observable<number>((observer: Observer<number>) => {
-        nextTrigger = (num: number) => {
-            return observer.next(num);
-        };
-        errorTrigger = (err: any) => {
-            return observer.error(err);
-        };
-        completeTrigger = () => {
-            return observer.complete();
-        };
-
-        return tearDownSpy;
-    });
-    const newSpyObserver = () => {
-        return {
-            next: jest.fn(),
-            error: jest.fn(),
-            complete: jest.fn()
-        };
+  let nextTrigger: (num: number) => void;
+  let errorTrigger: (err: any) => void;
+  let completeTrigger: () => void;
+  const tearDownSpy = jest.fn();
+  const sourceNumbers = new Observable<number>((observer: Observer<number>) => {
+    nextTrigger = (num: number) => {
+      return observer.next(num);
     };
-    // eslint-disable-next-line arrow-body-style
-    const takeTwo = take<number>(2);
-    const firstAndSecond = takeTwo(sourceNumbers);
+    errorTrigger = (err: any) => {
+      return observer.error(err);
+    };
+    completeTrigger = () => {
+      return observer.complete();
+    };
 
-    describe("upon emitted value in the source observable", () => {
-        test("should emit as many values as specified", () => {
-            const spyObserver = newSpyObserver();
-            const subscription = firstAndSecond.subscribe(spyObserver);
+    return tearDownSpy;
+  });
+  const newSpyObserver = () => {
+    return {
+      next: jest.fn(),
+      error: jest.fn(),
+      complete: jest.fn()
+    };
+  };
+  // eslint-disable-next-line arrow-body-style
+  const takeTwo = take<number>(2);
+  const firstAndSecond = takeTwo(sourceNumbers);
 
-            nextTrigger(1);
-            nextTrigger(2);
-            nextTrigger(3);
-            nextTrigger(4);
-            subscription.unsubscribe();
+  describe("upon emitted value in the source observable", () => {
+    test("should emit as many values as specified", () => {
+      const spyObserver = newSpyObserver();
+      const subscription = firstAndSecond.subscribe(spyObserver);
 
-            expect(spyObserver.next).toHaveBeenCalledWith(1);
-            expect(spyObserver.next).toHaveBeenCalledWith(2);
-            expect(spyObserver.next).toHaveBeenCalledTimes(2);
-            expect(spyObserver.error).not.toHaveBeenCalled();
-            expect(spyObserver.complete).toHaveBeenCalled();
-            expect(tearDownSpy).toHaveBeenCalled();
-        });
+      nextTrigger(1);
+      nextTrigger(2);
+      nextTrigger(3);
+      nextTrigger(4);
+      subscription.unsubscribe();
+
+      expect(spyObserver.next).toHaveBeenCalledWith(1);
+      expect(spyObserver.next).toHaveBeenCalledWith(2);
+      expect(spyObserver.next).toHaveBeenCalledTimes(2);
+      expect(spyObserver.error).not.toHaveBeenCalled();
+      expect(spyObserver.complete).toHaveBeenCalled();
+      expect(tearDownSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe("upon error in the source observable", () => {
+    test("should error if occurs before picking all the values", () => {
+      const spyObserver = newSpyObserver();
+      const subscription = firstAndSecond.subscribe(spyObserver);
+
+      nextTrigger(1);
+      errorTrigger(new Error("observer error"));
+      subscription.unsubscribe();
+
+      expect(spyObserver.next).toHaveBeenCalledWith(1);
+      expect(spyObserver.next).toHaveBeenCalledTimes(1);
+      expect(spyObserver.error).toHaveBeenCalledWith(expect.objectContaining({
+        message: "observer error"
+      }));
+      expect(spyObserver.complete).not.toHaveBeenCalled();
+      expect(tearDownSpy).toHaveBeenCalled();
     });
 
-    describe("upon error in the source observable", () => {
-        test("should error if occurs before picking all the values", () => {
-            const spyObserver = newSpyObserver();
-            const subscription = firstAndSecond.subscribe(spyObserver);
+    test("should complete if occurs after picking all the values", () => {
+      const spyObserver = newSpyObserver();
+      const subscription = firstAndSecond.subscribe(spyObserver);
 
-            nextTrigger(1);
-            errorTrigger(new Error("observer error"));
-            subscription.unsubscribe();
+      nextTrigger(1);
+      nextTrigger(2);
+      nextTrigger(3);
+      errorTrigger(new Error("observer error"));
+      subscription.unsubscribe();
 
-            expect(spyObserver.next).toHaveBeenCalledWith(1);
-            expect(spyObserver.next).toHaveBeenCalledTimes(1);
-            expect(spyObserver.error).toHaveBeenCalledWith(expect.objectContaining({
-                message: "observer error"
-            }));
-            expect(spyObserver.complete).not.toHaveBeenCalled();
-            expect(tearDownSpy).toHaveBeenCalled();
-        });
-
-        test("should complete if occurs after picking all the values", () => {
-            const spyObserver = newSpyObserver();
-            const subscription = firstAndSecond.subscribe(spyObserver);
-
-            nextTrigger(1);
-            nextTrigger(2);
-            nextTrigger(3);
-            errorTrigger(new Error("observer error"));
-            subscription.unsubscribe();
-
-            expect(spyObserver.next).toHaveBeenCalledWith(1);
-            expect(spyObserver.next).toHaveBeenCalledWith(2);
-            expect(spyObserver.next).toHaveBeenCalledTimes(2);
-            expect(spyObserver.error).not.toHaveBeenCalled();
-            expect(spyObserver.complete).toHaveBeenCalled();
-            expect(tearDownSpy).toHaveBeenCalled();
-        });
+      expect(spyObserver.next).toHaveBeenCalledWith(1);
+      expect(spyObserver.next).toHaveBeenCalledWith(2);
+      expect(spyObserver.next).toHaveBeenCalledTimes(2);
+      expect(spyObserver.error).not.toHaveBeenCalled();
+      expect(spyObserver.complete).toHaveBeenCalled();
+      expect(tearDownSpy).toHaveBeenCalled();
     });
+  });
 
-    describe("upon complete in the source observable", () => {
-        test("should complete before emitting all values", () => {
-            const spyObserver = newSpyObserver();
-            const subscription = firstAndSecond.subscribe(spyObserver);
+  describe("upon complete in the source observable", () => {
+    test("should complete before emitting all values", () => {
+      const spyObserver = newSpyObserver();
+      const subscription = firstAndSecond.subscribe(spyObserver);
 
-            nextTrigger(1);
-            completeTrigger();
-            subscription.unsubscribe();
+      nextTrigger(1);
+      completeTrigger();
+      subscription.unsubscribe();
 
-            expect(spyObserver.next).toHaveBeenCalledWith(1);
-            expect(spyObserver.next).toHaveBeenCalledTimes(1);
-            expect(spyObserver.error).not.toHaveBeenCalled();
-            expect(spyObserver.complete).toHaveBeenCalled();
-            expect(tearDownSpy).toHaveBeenCalled();
-        });
+      expect(spyObserver.next).toHaveBeenCalledWith(1);
+      expect(spyObserver.next).toHaveBeenCalledTimes(1);
+      expect(spyObserver.error).not.toHaveBeenCalled();
+      expect(spyObserver.complete).toHaveBeenCalled();
+      expect(tearDownSpy).toHaveBeenCalled();
     });
+  });
 
 });

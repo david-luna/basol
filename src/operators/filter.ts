@@ -9,25 +9,25 @@ import { OperatorFunction } from "../types";
  * @returns function
  */
 export function filter<T>(check: (value: T) => boolean): OperatorFunction<T, T> {
-    return (source: Observable<T>): Observable<T> => {
-        return new Observable<T>(observer => {
-            const sourceSubscription = source.subscribe({
-                next: (value) => {
-                    if (check(value)) {
-                        observer.next(value);
-                    }
-                },
-                error: (err) => {
-                    observer.error(err);
-                },
-                complete: () => {
-                    observer.complete();
-                }
-            });
+  return (source: Observable<T>): Observable<T> => {
+    return new Observable<T>(observer => {
+      const sourceSubscription = source.subscribe({
+        next: (value) => {
+          if (check(value)) {
+            observer.next(value);
+          }
+        },
+        error: (err) => {
+          observer.error(err);
+        },
+        complete: () => {
+          observer.complete();
+        }
+      });
 
-            return () => {
-                return sourceSubscription.unsubscribe();
-            };
-        });
-    };
+      return () => {
+        return sourceSubscription.unsubscribe();
+      };
+    });
+  };
 }
