@@ -37,6 +37,10 @@ describe("Observable", () => {
     });
   });
 
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   describe("upon call to observer.next", () => {
     test("should emit a value without error nor completion", () => {
       const spyObserver = newSpyObserver();

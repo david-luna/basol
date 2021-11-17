@@ -12,7 +12,7 @@ const noop = (): void => {
 export class Observable<T> {
   private readonly subscribers: Observer<T>[] = [];
   private readonly subscribeFn: SubscribeFunction<T>;
-  private teardownFn: TeardownFunction;
+  private teardownFn!: TeardownFunction;
 
   constructor(subscribeFn: SubscribeFunction<T>) {
     this.subscribeFn = subscribeFn;

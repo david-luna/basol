@@ -13,6 +13,10 @@ describe("Subscriber", () => {
     subscription = new Subscriber<number>(spyObserver, tearDownSpy);
   });
 
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
   describe("upon call to next", () => {
     test("should emit the value to the inner observer", () => {
       subscription.next(1);
