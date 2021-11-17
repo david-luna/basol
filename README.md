@@ -1,6 +1,6 @@
 # yaol
 
-Yet another oberver lib
+Yet another observer lib
 
 ## Summary
 
