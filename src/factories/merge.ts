@@ -25,6 +25,7 @@ export function merge(...observables: Observable<any>[]): Observable<any> {
       complete: () => {
         completedSubscriptions++;
         if (completedSubscriptions === innerSubscriptions.length) {
+          console.log('merge complete');
           observer.complete();
         }
       }

@@ -173,6 +173,9 @@ describe("merge factory", () => {
     expect(mergeNextSpy).toHaveBeenNthCalledWith(6, false);
     expect(mergeNextSpy).toHaveBeenNthCalledWith(7, true);
 
+    booleanSpiedObservable.triggers.complete!();
+    expect(mergeCompleteSpy).toHaveBeenCalled();
+
     subscription.unsubscribe();
     expect(numberSpiedObservable.spies.tearDown).toHaveBeenCalled();
     expect(stringSpiedObservable.spies.tearDown).toHaveBeenCalled();

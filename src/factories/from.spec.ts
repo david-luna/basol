@@ -19,38 +19,73 @@ describe("from factory", () => {
     });
   });
 
-  test("should create an observable from a promise that resolves", () => {
-    const promise = new Promise<boolean>((resolve) => {
-      setTimeout(() => {
-        resolve(true);
-      });
-    });
+  test("should create an observable from a resolved", (done) => {
+    const promise = Promise.resolve(true);
+
     from(promise).subscribe({
       next: (value) => {
         expect(value).toEqual(true);
       },
       complete: () => {
         expect.assertions(1);
+        done();
       }
     });
   });
 
-  test("should create an observable from a promise that rejects", () => {
-    const promise = new Promise<boolean>((resolve, reject) => {
-      setTimeout(() => {
-        reject(new Error("promise rejected"));
-      });
+  test("should create an observable from a promise that resolves after a time", async () => {
+    const nextSpy = jest.fn();
+    const completeSpy = jest.fn();
+    const promise = new Promise((resolve) => {
+      setTimeout(() => resolve(true));
     });
+
+    from(promise).subscribe({
+      next: nextSpy,
+      complete: completeSpy,
+    });
+    
+    await promise;
+    expect(nextSpy).toHaveBeenCalledWith(true);
+    expect(completeSpy).toHaveBeenCalled();
+  });
+
+  test("should create an observable from a promise that rejects", (done) => {
+    const promise = Promise.reject(new Error("promise rejected"));
+
     from(promise).subscribe({
       error: (details) => {
         expect(details).toEqual(expect.objectContaining({
           message: "promise rejected"
         }));
-      },
-      complete: () => {
-        expect.assertions(1);
+        done();
       }
     });
+  });
+
+  test("should create an observable from a promise that rejects after a time", async () => {
+    const nextSpy = jest.fn();
+    const errorSpy = jest.fn();
+    const completeSpy = jest.fn();
+    const promise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error("promise rejected")));
+    });
+
+    from(promise).subscribe({
+      next: nextSpy,
+      error: errorSpy,
+      complete: completeSpy,
+    });
+    
+    try {
+      await promise;
+    } catch (e) {}
+    
+    expect(nextSpy).not.toHaveBeenCalled();
+    expect(completeSpy).not.toHaveBeenCalled();
+    expect(errorSpy).toHaveBeenCalledWith(expect.objectContaining({
+      message: "promise rejected"
+    }));
   });
 
   test("should return the input if it's an observable", () => {
