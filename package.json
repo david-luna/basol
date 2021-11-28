@@ -2,13 +2,16 @@
   "name": "yaol",
   "version": "0.0.1",
   "description": "Yet Another Observable Library",
-  "main": "./lib/index.js",
+  "main": "./lib/cjs/index.js",
+  "module": "./lib/esm/index.js",
   "types": "./lib/index.d.ts",
   "files": [
     "lib"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
+    "build": "npm run build-browser && npm run build-node",
+    "build-browser": "tsc -p tsconfig.browser.json",
+    "build-node": "tsc -p tsconfig.node.json",
     "test": "jest",
     "clean": "rm -rf coverage && rm -rf lib",
     "lcov": "cat coverage/lcov.info | coveralls",
