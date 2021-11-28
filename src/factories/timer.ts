@@ -1,4 +1,4 @@
-import { Observable } from "../observable";
+import { Observable } from '../observable';
 
 /**
  * Creates an observable emiting a void value after the given time or at the given date

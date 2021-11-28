@@ -1,18 +1,17 @@
-import { Observable } from "../observable";
-import { ObservableInput } from "../types";
+import { Observable } from '../observable';
+import { ObservableInput } from '../types';
 
 const isPromiseLike = function isPromiseLike(target: any): target is PromiseLike<unknown> {
-  return typeof target?.then === "function";
+  return typeof target?.then === 'function';
 };
 
 const isArrayLike = function isArrayLike(target: any): target is ArrayLike<unknown> {
-  return typeof target?.length === "number";
+  return typeof target?.length === 'number';
 };
 
 const isObservable = function isObservable(target: any): target is Observable<unknown> {
-  return typeof target?.subscribe === "function";
+  return typeof target?.subscribe === 'function';
 };
-
 
 /**
  * Creates an observable from a promise
@@ -29,7 +28,7 @@ function fromPromise<T>(promise: PromiseLike<T>): Observable<T> {
       },
       (error: unknown) => {
         observer.error(error);
-      }
+      },
     );
   });
 }
@@ -48,7 +47,6 @@ function fromArray<T>(array: ArrayLike<T>): Observable<T> {
     observer.complete();
   });
 }
-
 
 /**
  * Creates an observable
@@ -70,5 +68,5 @@ export function from<T>(input: ObservableInput<T>): Observable<T> {
   }
 
   // Throw if not recognized
-  throw new Error("cannot create an observable for the given input");
+  throw new Error('cannot create an observable for the given input');
 }

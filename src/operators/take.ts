@@ -1,5 +1,5 @@
-import { Observable } from "../observable";
-import { OperatorFunction } from "../types";
+import { Observable } from '../observable';
+import { OperatorFunction } from '../types';
 
 /**
  * Returns a function which transforms a source observable to a new one which emits as much values as the count says
@@ -9,7 +9,7 @@ import { OperatorFunction } from "../types";
  */
 export function take<T>(count: number): OperatorFunction<T, T> {
   return (source: Observable<T>): Observable<T> => {
-    return new Observable<T>(observer => {
+    return new Observable<T>((observer) => {
       let seen = 0;
       const sourceSubscription = source.subscribe({
         next: (value) => {
@@ -25,7 +25,7 @@ export function take<T>(count: number): OperatorFunction<T, T> {
         },
         complete: () => {
           observer.complete();
-        }
+        },
       });
 
       return () => {

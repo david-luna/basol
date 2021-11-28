@@ -1,5 +1,5 @@
-import { Observer, Subscription } from "./types";
-import { Observable } from "./observable";
+import { Observer, Subscription } from './types';
+import { Observable } from './observable';
 
 interface ObserverSpy {
   next: jest.SpyInstance;
@@ -7,7 +7,7 @@ interface ObserverSpy {
   complete: jest.SpyInstance;
 }
 
-describe("Observable", () => {
+describe('Observable', () => {
   let nextTrigger: (num: number) => void;
   let errorTrigger: (err: any) => void;
   let completeTrigger: () => void;
@@ -17,7 +17,7 @@ describe("Observable", () => {
     return {
       next: jest.fn(),
       error: jest.fn(),
-      complete: jest.fn()
+      complete: jest.fn(),
     };
   };
 
@@ -41,8 +41,8 @@ describe("Observable", () => {
     jest.resetAllMocks();
   });
 
-  describe("upon call to observer.next", () => {
-    test("should emit a value without error nor completion", () => {
+  describe('upon call to observer.next', () => {
+    test('should emit a value without error nor completion', () => {
       const spyObserver = newSpyObserver();
       const subscription = observable.subscribe(spyObserver);
 
@@ -55,7 +55,7 @@ describe("Observable", () => {
       expect(tearDownSpy).toHaveBeenCalled();
     });
 
-    test("should allow to emit more than one value", () => {
+    test('should allow to emit more than one value', () => {
       const spyObserver = newSpyObserver();
       const subscription = observable.subscribe(spyObserver);
 
@@ -73,16 +73,15 @@ describe("Observable", () => {
     });
   });
 
-
-  describe("upon call to observer.error", () => {
-    test("should not emit a value or complete", () => {
+  describe('upon call to observer.error', () => {
+    test('should not emit a value or complete', () => {
       const spyObserver = newSpyObserver();
       const subscription = observable.subscribe(spyObserver);
 
       nextTrigger(1);
       nextTrigger(2);
       nextTrigger(3);
-      errorTrigger(new Error("observer error"));
+      errorTrigger(new Error('observer error'));
       nextTrigger(4);
       completeTrigger();
       subscription.unsubscribe();
@@ -91,16 +90,18 @@ describe("Observable", () => {
       expect(spyObserver.next).toHaveBeenNthCalledWith(2, 2);
       expect(spyObserver.next).toHaveBeenNthCalledWith(3, 3);
       expect(spyObserver.next).toHaveBeenCalledTimes(3);
-      expect(spyObserver.error).toHaveBeenCalledWith(expect.objectContaining({
-        message: "observer error"
-      }));
+      expect(spyObserver.error).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: 'observer error',
+        }),
+      );
       expect(spyObserver.complete).not.toHaveBeenCalled();
       expect(tearDownSpy).toHaveBeenCalled();
     });
   });
 
-  describe("upon call to observer.complete", () => {
-    test("should complete when the complete method is called on the observer", () => {
+  describe('upon call to observer.complete', () => {
+    test('should complete when the complete method is called on the observer', () => {
       const spyObserver = newSpyObserver();
       const subscription = observable.subscribe(spyObserver);
 
@@ -109,7 +110,7 @@ describe("Observable", () => {
       nextTrigger(3);
       completeTrigger();
       nextTrigger(4);
-      errorTrigger(new Error("observer error"));
+      errorTrigger(new Error('observer error'));
       subscription.unsubscribe();
 
       expect(spyObserver.next).toHaveBeenNthCalledWith(1, 1);
@@ -122,7 +123,7 @@ describe("Observable", () => {
     });
   });
 
-  describe("when having more than one subscription", () => {
+  describe('when having more than one subscription', () => {
     let spyObserverOne: ObserverSpy;
     let spyObserverTwo: ObserverSpy;
     let subscriptionOne: Subscription;
@@ -135,7 +136,7 @@ describe("Observable", () => {
       subscriptionTwo = observable.subscribe(spyObserverTwo as unknown as Observer<number>);
     });
 
-    test("calls to observer.next should spread to all subscriptions", () => {
+    test('calls to observer.next should spread to all subscriptions', () => {
       nextTrigger(1);
       nextTrigger(2);
       nextTrigger(3);
@@ -153,11 +154,11 @@ describe("Observable", () => {
       expect(tearDownSpy).not.toHaveBeenCalled();
     });
 
-    test("calls to observer.error should spread to all subscriptions and stop emitting", () => {
+    test('calls to observer.error should spread to all subscriptions and stop emitting', () => {
       nextTrigger(1);
       nextTrigger(2);
       nextTrigger(3);
-      errorTrigger(new Error("observer error"));
+      errorTrigger(new Error('observer error'));
       nextTrigger(4);
       completeTrigger();
 
@@ -165,28 +166,32 @@ describe("Observable", () => {
       expect(spyObserverOne.next).toHaveBeenNthCalledWith(2, 2);
       expect(spyObserverOne.next).toHaveBeenNthCalledWith(3, 3);
       expect(spyObserverOne.next).toHaveBeenCalledTimes(3);
-      expect(spyObserverOne.error).toHaveBeenCalledWith(expect.objectContaining({
-        message: "observer error"
-      }));
+      expect(spyObserverOne.error).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: 'observer error',
+        }),
+      );
       expect(spyObserverTwo.complete).not.toHaveBeenCalled();
       expect(spyObserverTwo.next).toHaveBeenNthCalledWith(1, 1);
       expect(spyObserverTwo.next).toHaveBeenNthCalledWith(2, 2);
       expect(spyObserverTwo.next).toHaveBeenNthCalledWith(3, 3);
       expect(spyObserverTwo.next).toHaveBeenCalledTimes(3);
-      expect(spyObserverTwo.error).toHaveBeenCalledWith(expect.objectContaining({
-        message: "observer error"
-      }));
+      expect(spyObserverTwo.error).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: 'observer error',
+        }),
+      );
       expect(spyObserverTwo.complete).not.toHaveBeenCalled();
       expect(tearDownSpy).not.toHaveBeenCalled();
     });
 
-    test("calls to observer.complete should spread to all subscriptions and stop emitting", () => {
+    test('calls to observer.complete should spread to all subscriptions and stop emitting', () => {
       nextTrigger(1);
       nextTrigger(2);
       nextTrigger(3);
       completeTrigger();
       nextTrigger(4);
-      errorTrigger(new Error("observer error"));
+      errorTrigger(new Error('observer error'));
 
       expect(spyObserverOne.next).toHaveBeenNthCalledWith(1, 1);
       expect(spyObserverOne.next).toHaveBeenNthCalledWith(2, 2);
@@ -203,7 +208,7 @@ describe("Observable", () => {
       expect(tearDownSpy).not.toHaveBeenCalled();
     });
 
-    test("upon unsubscribe it should stop receiving values/errors/complete for that subscription", () => {
+    test('upon unsubscribe it should stop receiving values/errors/complete for that subscription', () => {
       nextTrigger(1);
       nextTrigger(2);
       subscriptionOne.unsubscribe();
@@ -226,7 +231,7 @@ describe("Observable", () => {
       expect(tearDownSpy).not.toHaveBeenCalled();
     });
 
-    test("upon unsubscribe in all subscriptions it should tear down the observable", () => {
+    test('upon unsubscribe in all subscriptions it should tear down the observable', () => {
       nextTrigger(1);
       nextTrigger(2);
       subscriptionOne.unsubscribe();

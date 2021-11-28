@@ -1,9 +1,8 @@
-import { map } from "./map";
-import { Observable } from "../observable";
-import { Observer } from "../types";
+import { map } from './map';
+import { Observable } from '../observable';
+import { Observer } from '../types';
 
-
-describe("map operator", () => {
+describe('map operator', () => {
   let nextTrigger: (num: number) => void;
   let errorTrigger: (err: any) => void;
   let completeTrigger: () => void;
@@ -25,15 +24,15 @@ describe("map operator", () => {
     return {
       next: jest.fn(),
       error: jest.fn(),
-      complete: jest.fn()
+      complete: jest.fn(),
     };
   };
   // eslint-disable-next-line arrow-body-style
   const toSquared = map((x: number) => x * x);
   const squaredNumbers = toSquared(sourceNumbers);
 
-  describe("upon emitted value in the source observable", () => {
-    test("should emit the mapped values", () => {
+  describe('upon emitted value in the source observable', () => {
+    test('should emit the mapped values', () => {
       const spyObserver = newSpyObserver();
       const subscription = squaredNumbers.subscribe(spyObserver);
 
@@ -51,26 +50,28 @@ describe("map operator", () => {
     });
   });
 
-  describe("upon error in the source observable", () => {
-    test("should error in the mapped observables", () => {
+  describe('upon error in the source observable', () => {
+    test('should error in the mapped observables', () => {
       const spyObserver = newSpyObserver();
       const subscription = squaredNumbers.subscribe(spyObserver);
 
       nextTrigger(2);
-      errorTrigger(new Error("observer error"));
+      errorTrigger(new Error('observer error'));
       subscription.unsubscribe();
 
       expect(spyObserver.next).toHaveBeenCalledWith(4);
-      expect(spyObserver.error).toHaveBeenCalledWith(expect.objectContaining({
-        message: "observer error"
-      }));
+      expect(spyObserver.error).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: 'observer error',
+        }),
+      );
       expect(spyObserver.complete).not.toHaveBeenCalled();
       expect(tearDownSpy).toHaveBeenCalled();
     });
   });
 
-  describe("upon complete in the source observable", () => {
-    test("should complete in the mapped observables", () => {
+  describe('upon complete in the source observable', () => {
+    test('should complete in the mapped observables', () => {
       const spyObserver = newSpyObserver();
       const subscription = squaredNumbers.subscribe(spyObserver);
 
@@ -84,5 +85,4 @@ describe("map operator", () => {
       expect(tearDownSpy).toHaveBeenCalled();
     });
   });
-
 });

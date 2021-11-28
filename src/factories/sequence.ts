@@ -1,4 +1,4 @@
-import { Observable } from "../observable";
+import { Observable } from '../observable';
 
 type SequenceFactory<T> = (index: number) => T;
 
@@ -13,15 +13,12 @@ export function sequence<T>(period: number, factory: SequenceFactory<T>): Observ
  * @param period the time between emissions
  * @returns observable
  */
-export function sequence(
-  period = 0,
-  factory = (x: number) => x,
-): Observable<any> {
+export function sequence(period = 0, factory = (x: number) => x): Observable<any> {
   return new Observable<number>((observer) => {
     let index = 0;
     let value: any;
 
-    const id = setInterval(() => observer.next(value = factory(index++)), period);
+    const id = setInterval(() => observer.next((value = factory(index++))), period);
 
     return () => {
       clearInterval(id);

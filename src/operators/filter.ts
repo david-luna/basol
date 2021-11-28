@@ -1,5 +1,5 @@
-import { Observable } from "../observable";
-import { OperatorFunction } from "../types";
+import { Observable } from '../observable';
+import { OperatorFunction } from '../types';
 
 /**
  * Returns a function which transforms a source observable to a new one which emits values only if
@@ -10,7 +10,7 @@ import { OperatorFunction } from "../types";
  */
 export function filter<T>(check: (value: T) => boolean): OperatorFunction<T, T> {
   return (source: Observable<T>): Observable<T> => {
-    return new Observable<T>(observer => {
+    return new Observable<T>((observer) => {
       const sourceSubscription = source.subscribe({
         next: (value) => {
           if (check(value)) {
@@ -22,7 +22,7 @@ export function filter<T>(check: (value: T) => boolean): OperatorFunction<T, T> 
         },
         complete: () => {
           observer.complete();
-        }
+        },
       });
 
       return () => {

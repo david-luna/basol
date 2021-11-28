@@ -1,9 +1,8 @@
-import { Observable } from "../observable";
-import { Observer } from "../types";
-import { take } from "./take";
+import { Observable } from '../observable';
+import { Observer } from '../types';
+import { take } from './take';
 
-
-describe("take operator", () => {
+describe('take operator', () => {
   let nextTrigger: (num: number) => void;
   let errorTrigger: (err: any) => void;
   let completeTrigger: () => void;
@@ -25,15 +24,15 @@ describe("take operator", () => {
     return {
       next: jest.fn(),
       error: jest.fn(),
-      complete: jest.fn()
+      complete: jest.fn(),
     };
   };
   // eslint-disable-next-line arrow-body-style
   const takeTwo = take<number>(2);
   const firstAndSecond = takeTwo(sourceNumbers);
 
-  describe("upon emitted value in the source observable", () => {
-    test("should emit as many values as specified", () => {
+  describe('upon emitted value in the source observable', () => {
+    test('should emit as many values as specified', () => {
       const spyObserver = newSpyObserver();
       const subscription = firstAndSecond.subscribe(spyObserver);
 
@@ -52,32 +51,34 @@ describe("take operator", () => {
     });
   });
 
-  describe("upon error in the source observable", () => {
-    test("should error if occurs before picking all the values", () => {
+  describe('upon error in the source observable', () => {
+    test('should error if occurs before picking all the values', () => {
       const spyObserver = newSpyObserver();
       const subscription = firstAndSecond.subscribe(spyObserver);
 
       nextTrigger(1);
-      errorTrigger(new Error("observer error"));
+      errorTrigger(new Error('observer error'));
       subscription.unsubscribe();
 
       expect(spyObserver.next).toHaveBeenCalledWith(1);
       expect(spyObserver.next).toHaveBeenCalledTimes(1);
-      expect(spyObserver.error).toHaveBeenCalledWith(expect.objectContaining({
-        message: "observer error"
-      }));
+      expect(spyObserver.error).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: 'observer error',
+        }),
+      );
       expect(spyObserver.complete).not.toHaveBeenCalled();
       expect(tearDownSpy).toHaveBeenCalled();
     });
 
-    test("should complete if occurs after picking all the values", () => {
+    test('should complete if occurs after picking all the values', () => {
       const spyObserver = newSpyObserver();
       const subscription = firstAndSecond.subscribe(spyObserver);
 
       nextTrigger(1);
       nextTrigger(2);
       nextTrigger(3);
-      errorTrigger(new Error("observer error"));
+      errorTrigger(new Error('observer error'));
       subscription.unsubscribe();
 
       expect(spyObserver.next).toHaveBeenCalledWith(1);
@@ -89,8 +90,8 @@ describe("take operator", () => {
     });
   });
 
-  describe("upon complete in the source observable", () => {
-    test("should complete before emitting all values", () => {
+  describe('upon complete in the source observable', () => {
+    test('should complete before emitting all values', () => {
       const spyObserver = newSpyObserver();
       const subscription = firstAndSecond.subscribe(spyObserver);
 
@@ -105,5 +106,4 @@ describe("take operator", () => {
       expect(tearDownSpy).toHaveBeenCalled();
     });
   });
-
 });

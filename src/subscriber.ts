@@ -1,4 +1,4 @@
-import { Observer } from "./types";
+import { Observer } from './types';
 
 const noop = (): void => {
   return void 0;
@@ -15,7 +15,7 @@ export class Subscriber<T> {
     this.observer = {
       next: (observer.next || noop).bind(observer),
       error: (observer.error || noop).bind(observer),
-      complete: (observer.complete || noop).bind(observer)
+      complete: (observer.complete || noop).bind(observer),
     };
   }
 

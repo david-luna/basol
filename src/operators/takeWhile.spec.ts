@@ -1,8 +1,8 @@
-import { Observable } from "../observable";
-import { Observer } from "../types";
-import { takeWhile } from "./takeWhile";
+import { Observable } from '../observable';
+import { Observer } from '../types';
+import { takeWhile } from './takeWhile';
 
-describe("takeWhile operator", () => {
+describe('takeWhile operator', () => {
   let nextTrigger: (num: number) => void;
   let errorTrigger: (err: any) => void;
   let completeTrigger: () => void;
@@ -24,15 +24,15 @@ describe("takeWhile operator", () => {
     return {
       next: jest.fn(),
       error: jest.fn(),
-      complete: jest.fn()
+      complete: jest.fn(),
     };
   };
   // eslint-disable-next-line arrow-body-style
   const lowSquares = takeWhile<number>((value, index) => Math.pow(value, 2) < 100);
   const squaresBelowhundred = lowSquares(sourceNumbers);
 
-  describe("upon emitted value in the source observable", () => {
-    test("should emit values if they pass the predicate", () => {
+  describe('upon emitted value in the source observable', () => {
+    test('should emit values if they pass the predicate', () => {
       const spyObserver = newSpyObserver();
       const subscription = squaresBelowhundred.subscribe(spyObserver);
 
@@ -51,28 +51,30 @@ describe("takeWhile operator", () => {
       expect(tearDownSpy).toHaveBeenCalled();
     });
 
-    test("should emit values until the predicate fails", () => {
+    test('should emit values until the predicate fails', () => {
       const spyObserver = newSpyObserver();
       const subscription = squaresBelowhundred.subscribe(spyObserver);
-      const values = [...new Array(10)].map((v,i) => i + 1);
+      const values = [...new Array(10)].map((v, i) => i + 1);
 
       values.forEach(nextTrigger);
       subscription.unsubscribe();
 
-      values.filter(v => v !== 10).forEach((v) => {
-        expect(spyObserver.next).toHaveBeenCalledWith(v);
-      });
+      values
+        .filter((v) => v !== 10)
+        .forEach((v) => {
+          expect(spyObserver.next).toHaveBeenCalledWith(v);
+        });
       expect(spyObserver.error).not.toHaveBeenCalled();
       expect(spyObserver.complete).toHaveBeenCalled();
       expect(tearDownSpy).toHaveBeenCalled();
     });
 
-    test("should emit values until the predicate fails including the last one", () => {
+    test('should emit values until the predicate fails including the last one', () => {
       const lowSquaresIncluding = takeWhile<number>((value, index) => Math.pow(value, 2) < 100, true);
       const squaresBelowhundredIncluding = lowSquaresIncluding(sourceNumbers);
       const spyObserver = newSpyObserver();
       const subscription = squaresBelowhundredIncluding.subscribe(spyObserver);
-      const values = [...new Array(10)].map((v,i) => i + 1);
+      const values = [...new Array(10)].map((v, i) => i + 1);
 
       values.forEach(nextTrigger);
       subscription.unsubscribe();
@@ -86,33 +88,35 @@ describe("takeWhile operator", () => {
     });
   });
 
-  describe("upon error in the source observable", () => {
-    test("should error if occurs before picking all the values", () => {
+  describe('upon error in the source observable', () => {
+    test('should error if occurs before picking all the values', () => {
       const spyObserver = newSpyObserver();
       const subscription = squaresBelowhundred.subscribe(spyObserver);
 
       nextTrigger(1);
-      errorTrigger(new Error("observer error"));
+      errorTrigger(new Error('observer error'));
       nextTrigger(2);
       subscription.unsubscribe();
 
       expect(spyObserver.next).toHaveBeenCalledWith(1);
       expect(spyObserver.next).toHaveBeenCalledTimes(1);
-      expect(spyObserver.error).toHaveBeenCalledWith(expect.objectContaining({
-        message: "observer error"
-      }));
+      expect(spyObserver.error).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: 'observer error',
+        }),
+      );
       expect(spyObserver.complete).not.toHaveBeenCalled();
       expect(tearDownSpy).toHaveBeenCalled();
     });
 
-    test("should complete if occurs after picking all the values", () => {
+    test('should complete if occurs after picking all the values', () => {
       const spyObserver = newSpyObserver();
       const subscription = squaresBelowhundred.subscribe(spyObserver);
 
       nextTrigger(1);
       nextTrigger(2);
       nextTrigger(3);
-      errorTrigger(new Error("observer error"));
+      errorTrigger(new Error('observer error'));
       subscription.unsubscribe();
 
       expect(spyObserver.next).toHaveBeenCalledWith(1);
@@ -125,8 +129,8 @@ describe("takeWhile operator", () => {
     });
   });
 
-  describe("upon complete in the source observable", () => {
-    test("should complete before emitting any value", () => {
+  describe('upon complete in the source observable', () => {
+    test('should complete before emitting any value', () => {
       const spyObserver = newSpyObserver();
       const subscription = squaresBelowhundred.subscribe(spyObserver);
 
@@ -141,7 +145,7 @@ describe("takeWhile operator", () => {
       expect(tearDownSpy).toHaveBeenCalled();
     });
 
-    test("should complete if the source observable completes", () => {
+    test('should complete if the source observable completes', () => {
       const spyObserver = newSpyObserver();
       const subscription = squaresBelowhundred.subscribe(spyObserver);
 

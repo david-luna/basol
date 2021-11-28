@@ -1,6 +1,6 @@
-import { merge } from "./merge";
-import { Observable } from "../observable";
-import { TeardownFunction } from "../types";
+import { merge } from './merge';
+import { Observable } from '../observable';
+import { TeardownFunction } from '../types';
 
 interface ObservableWithSpies<T> {
   observable: Observable<T>;
@@ -39,9 +39,8 @@ const newObservableWithSpies = <T>(): ObservableWithSpies<T> => {
   return result;
 };
 
-describe("merge factory", () => {
-
-  test("should create an observable which emits values from all other observables", () => {
+describe('merge factory', () => {
+  test('should create an observable which emits values from all other observables', () => {
     const numberSpiedObservable = newObservableWithSpies<number>();
     const stringSpiedObservable = newObservableWithSpies<string>();
     const booleanSpiedObservable = newObservableWithSpies<boolean>();
@@ -49,7 +48,7 @@ describe("merge factory", () => {
     const merged = merge(
       numberSpiedObservable.observable,
       stringSpiedObservable.observable,
-      booleanSpiedObservable.observable
+      booleanSpiedObservable.observable,
     );
 
     const mergeNextSpy = jest.fn();
@@ -58,27 +57,27 @@ describe("merge factory", () => {
     const subscription = merged.subscribe({
       next: mergeNextSpy,
       error: mergeErrorSpy,
-      complete: mergeCompleteSpy
+      complete: mergeCompleteSpy,
     });
 
     numberSpiedObservable.triggers.next!(1);
-    stringSpiedObservable.triggers.next!("one");
+    stringSpiedObservable.triggers.next!('one');
     booleanSpiedObservable.triggers.next!(true);
     numberSpiedObservable.triggers.next!(2);
-    stringSpiedObservable.triggers.next!("two");
+    stringSpiedObservable.triggers.next!('two');
     booleanSpiedObservable.triggers.next!(false);
     numberSpiedObservable.triggers.next!(3);
-    stringSpiedObservable.triggers.next!("three");
+    stringSpiedObservable.triggers.next!('three');
     booleanSpiedObservable.triggers.next!(true);
 
     expect(mergeNextSpy).toHaveBeenNthCalledWith(1, 1);
-    expect(mergeNextSpy).toHaveBeenNthCalledWith(2, "one");
+    expect(mergeNextSpy).toHaveBeenNthCalledWith(2, 'one');
     expect(mergeNextSpy).toHaveBeenNthCalledWith(3, true);
     expect(mergeNextSpy).toHaveBeenNthCalledWith(4, 2);
-    expect(mergeNextSpy).toHaveBeenNthCalledWith(5, "two");
+    expect(mergeNextSpy).toHaveBeenNthCalledWith(5, 'two');
     expect(mergeNextSpy).toHaveBeenNthCalledWith(6, false);
     expect(mergeNextSpy).toHaveBeenNthCalledWith(7, 3);
-    expect(mergeNextSpy).toHaveBeenNthCalledWith(8, "three");
+    expect(mergeNextSpy).toHaveBeenNthCalledWith(8, 'three');
     expect(mergeNextSpy).toHaveBeenNthCalledWith(9, true);
 
     subscription.unsubscribe();
@@ -87,8 +86,7 @@ describe("merge factory", () => {
     expect(booleanSpiedObservable.spies.tearDown).toHaveBeenCalled();
   });
 
-
-  test("should create an observable which does not emit anymore if some of the sources fail", () => {
+  test('should create an observable which does not emit anymore if some of the sources fail', () => {
     const numberSpiedObservable = newObservableWithSpies<number>();
     const stringSpiedObservable = newObservableWithSpies<string>();
     const booleanSpiedObservable = newObservableWithSpies<boolean>();
@@ -96,7 +94,7 @@ describe("merge factory", () => {
     const merged = merge(
       numberSpiedObservable.observable,
       stringSpiedObservable.observable,
-      booleanSpiedObservable.observable
+      booleanSpiedObservable.observable,
     );
 
     const mergeNextSpy = jest.fn();
@@ -105,26 +103,28 @@ describe("merge factory", () => {
     const subscription = merged.subscribe({
       next: mergeNextSpy,
       error: mergeErrorSpy,
-      complete: mergeCompleteSpy
+      complete: mergeCompleteSpy,
     });
 
     numberSpiedObservable.triggers.next!(1);
-    stringSpiedObservable.triggers.next!("one");
+    stringSpiedObservable.triggers.next!('one');
     booleanSpiedObservable.triggers.next!(true);
     numberSpiedObservable.triggers.next!(2);
-    stringSpiedObservable.triggers.next!("two");
-    numberSpiedObservable.triggers.error!(new Error("some error"));
+    stringSpiedObservable.triggers.next!('two');
+    numberSpiedObservable.triggers.error!(new Error('some error'));
     booleanSpiedObservable.triggers.next!(false);
 
     expect(mergeNextSpy).toHaveBeenNthCalledWith(1, 1);
-    expect(mergeNextSpy).toHaveBeenNthCalledWith(2, "one");
+    expect(mergeNextSpy).toHaveBeenNthCalledWith(2, 'one');
     expect(mergeNextSpy).toHaveBeenNthCalledWith(3, true);
     expect(mergeNextSpy).toHaveBeenNthCalledWith(4, 2);
-    expect(mergeNextSpy).toHaveBeenNthCalledWith(5, "two");
+    expect(mergeNextSpy).toHaveBeenNthCalledWith(5, 'two');
     expect(mergeNextSpy).toHaveBeenCalledTimes(5);
-    expect(mergeErrorSpy).toHaveBeenCalledWith(expect.objectContaining({
-      message: "some error"
-    }));
+    expect(mergeErrorSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: 'some error',
+      }),
+    );
 
     subscription.unsubscribe();
     expect(numberSpiedObservable.spies.tearDown).toHaveBeenCalled();
@@ -132,7 +132,7 @@ describe("merge factory", () => {
     expect(booleanSpiedObservable.spies.tearDown).toHaveBeenCalled();
   });
 
-  test("should create an observable which does complete until all sources complete", () => {
+  test('should create an observable which does complete until all sources complete', () => {
     const numberSpiedObservable = newObservableWithSpies<number>();
     const stringSpiedObservable = newObservableWithSpies<string>();
     const booleanSpiedObservable = newObservableWithSpies<boolean>();
@@ -140,7 +140,7 @@ describe("merge factory", () => {
     const merged = merge(
       numberSpiedObservable.observable,
       stringSpiedObservable.observable,
-      booleanSpiedObservable.observable
+      booleanSpiedObservable.observable,
     );
 
     const mergeNextSpy = jest.fn();
@@ -149,14 +149,14 @@ describe("merge factory", () => {
     const subscription = merged.subscribe({
       next: mergeNextSpy,
       error: mergeErrorSpy,
-      complete: mergeCompleteSpy
+      complete: mergeCompleteSpy,
     });
 
     numberSpiedObservable.triggers.next!(1);
-    stringSpiedObservable.triggers.next!("one");
+    stringSpiedObservable.triggers.next!('one');
     booleanSpiedObservable.triggers.next!(true);
     numberSpiedObservable.triggers.next!(2);
-    stringSpiedObservable.triggers.next!("two");
+    stringSpiedObservable.triggers.next!('two');
 
     numberSpiedObservable.triggers.complete!();
     stringSpiedObservable.triggers.complete!();
@@ -166,10 +166,10 @@ describe("merge factory", () => {
     booleanSpiedObservable.triggers.next!(true);
 
     expect(mergeNextSpy).toHaveBeenNthCalledWith(1, 1);
-    expect(mergeNextSpy).toHaveBeenNthCalledWith(2, "one");
+    expect(mergeNextSpy).toHaveBeenNthCalledWith(2, 'one');
     expect(mergeNextSpy).toHaveBeenNthCalledWith(3, true);
     expect(mergeNextSpy).toHaveBeenNthCalledWith(4, 2);
-    expect(mergeNextSpy).toHaveBeenNthCalledWith(5, "two");
+    expect(mergeNextSpy).toHaveBeenNthCalledWith(5, 'two');
     expect(mergeNextSpy).toHaveBeenNthCalledWith(6, false);
     expect(mergeNextSpy).toHaveBeenNthCalledWith(7, true);
 

@@ -1,7 +1,7 @@
-import { timer } from "./timer";
+import { timer } from './timer';
 
-describe("timer factory", () => {
-  test("should create an observable emiting after the given time", async () => {
+describe('timer factory', () => {
+  test('should create an observable emiting after the given time', async () => {
     const nextSpy = jest.fn();
     const errorSpy = jest.fn();
     const completeSpy = jest.fn();
@@ -16,7 +16,7 @@ describe("timer factory", () => {
     expect(nextSpy).not.toHaveBeenCalled();
 
     // we wait
-    await (new Promise(r => setTimeout(r,150)))
+    await new Promise((r) => setTimeout(r, 150));
     subscription.unsubscribe();
 
     // and now we should check
@@ -25,7 +25,7 @@ describe("timer factory", () => {
     expect(completeSpy).toHaveBeenCalled();
   });
 
-  test("should create an observable emiting at the given date", async () => {
+  test('should create an observable emiting at the given date', async () => {
     const nextSpy = jest.fn();
     const errorSpy = jest.fn();
     const completeSpy = jest.fn();
@@ -37,15 +37,14 @@ describe("timer factory", () => {
       complete: completeSpy,
     });
 
-    await (new Promise(r => setTimeout(r,150)));
+    await new Promise((r) => setTimeout(r, 150));
     expect(nextSpy).not.toHaveBeenCalled();
     expect(errorSpy).not.toHaveBeenCalled();
     expect(completeSpy).not.toHaveBeenCalled();
 
-    await (new Promise(r => setTimeout(r,900)));
+    await new Promise((r) => setTimeout(r, 900));
     expect(nextSpy).toHaveBeenCalled();
     expect(errorSpy).not.toHaveBeenCalled();
     expect(completeSpy).toHaveBeenCalled();
   });
-
 });

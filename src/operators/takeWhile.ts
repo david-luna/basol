@@ -1,5 +1,5 @@
-import { Observable } from "../observable";
-import { OperatorFunction } from "../types";
+import { Observable } from '../observable';
+import { OperatorFunction } from '../types';
 
 /**
  * Returns a function which transforms a source observable to a new one which emits vlues while
@@ -9,15 +9,18 @@ import { OperatorFunction } from "../types";
  * @param inclusive if true returns also the value that makes the predicate false
  * @returns function
  */
-export function takeWhile<T>(predicate: (value: T, index: number) => boolean, inclusive = false): OperatorFunction<T, T> {
+export function takeWhile<T>(
+  predicate: (value: T, index: number) => boolean,
+  inclusive = false,
+): OperatorFunction<T, T> {
   return (source: Observable<T>): Observable<T> => {
-    return new Observable<T>(observer => {
+    return new Observable<T>((observer) => {
       let index = 0;
       const sourceSubscription = source.subscribe({
         next: (value) => {
           const condition = predicate(value, index++);
 
-          if (condition || inclusive) {
+          if (condition || inclusive) {
             observer.next(value);
           }
 
@@ -30,7 +33,7 @@ export function takeWhile<T>(predicate: (value: T, index: number) => boolean, in
         },
         complete: () => {
           observer.complete();
-        }
+        },
       });
 
       return () => {

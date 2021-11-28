@@ -1,10 +1,21 @@
-import { Observable } from "../observable";
-import { Subscription } from "../types";
+import { Observable } from '../observable';
+import { Subscription } from '../types';
 
 export function merge<A, B>(a: Observable<A>, b: Observable<B>): Observable<A | B>;
 export function merge<A, B, C>(a: Observable<A>, b: Observable<B>, c: Observable<C>): Observable<A | B | C>;
-export function merge<A, B, C, D>(a: Observable<A>, b: Observable<B>, c: Observable<C>, d: Observable<D>): Observable<A | B | C | D>;
-export function merge<A, B, C, D, E>(a: Observable<A>, b: Observable<B>, c: Observable<C>, d: Observable<D>, e: Observable<E>): Observable<A | B | C | D | E>;
+export function merge<A, B, C, D>(
+  a: Observable<A>,
+  b: Observable<B>,
+  c: Observable<C>,
+  d: Observable<D>,
+): Observable<A | B | C | D>;
+export function merge<A, B, C, D, E>(
+  a: Observable<A>,
+  b: Observable<B>,
+  c: Observable<C>,
+  d: Observable<D>,
+  e: Observable<E>,
+): Observable<A | B | C | D | E>;
 /**
  * Merges all observables passed as param into a new one
  *
@@ -27,7 +38,7 @@ export function merge(...observables: Observable<any>[]): Observable<any> {
         if (completedSubscriptions === innerSubscriptions.length) {
           observer.complete();
         }
-      }
+      },
     };
 
     for (let i = 0; i < observables.length; i++) {

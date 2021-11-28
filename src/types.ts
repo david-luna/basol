@@ -1,4 +1,4 @@
-import { Observable } from "./observable";
+import { Observable } from './observable';
 
 export type TeardownFunction = () => void;
 
@@ -28,7 +28,6 @@ export interface ObserverComplete<T> {
 
 export type PartialObserver<T> = ObserverNext<T> | ObserverError<T> | ObserverComplete<T>;
 
-
 export interface SubscribeFunction<T> {
   (observer: Observer<T>): TeardownFunction | void;
 }
@@ -42,7 +41,6 @@ export interface UnaryFunction<T, R> {
 }
 
 export type OperatorFunction<T, R> = UnaryFunction<Observable<T>, Observable<R>>;
-
 
 /**
  * Valid types that can be converted to observables.

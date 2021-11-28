@@ -1,9 +1,8 @@
-import { filter } from "./filter";
-import { Observable } from "../observable";
-import { Observer } from "../types";
+import { filter } from './filter';
+import { Observable } from '../observable';
+import { Observer } from '../types';
 
-
-describe("filter operator", () => {
+describe('filter operator', () => {
   let nextTrigger: (num: number) => void;
   let errorTrigger: (err: any) => void;
   let completeTrigger: () => void;
@@ -25,15 +24,15 @@ describe("filter operator", () => {
     return {
       next: jest.fn(),
       error: jest.fn(),
-      complete: jest.fn()
+      complete: jest.fn(),
     };
   };
   // eslint-disable-next-line arrow-body-style
   const toEven = filter((x: number) => x % 2 === 0);
   const evenNumbers = toEven(sourceNumbers);
 
-  describe("upon emitted value in the source observable", () => {
-    test("should emit the filtered values", () => {
+  describe('upon emitted value in the source observable', () => {
+    test('should emit the filtered values', () => {
       const spyObserver = newSpyObserver();
       const subscription = evenNumbers.subscribe(spyObserver);
 
@@ -51,26 +50,28 @@ describe("filter operator", () => {
     });
   });
 
-  describe("upon error in the source observable", () => {
-    test("should error in the filtered observables", () => {
+  describe('upon error in the source observable', () => {
+    test('should error in the filtered observables', () => {
       const spyObserver = newSpyObserver();
       const subscription = evenNumbers.subscribe(spyObserver);
 
       nextTrigger(2);
-      errorTrigger(new Error("observer error"));
+      errorTrigger(new Error('observer error'));
       subscription.unsubscribe();
 
       expect(spyObserver.next).toHaveBeenCalledWith(2);
-      expect(spyObserver.error).toHaveBeenCalledWith(expect.objectContaining({
-        message: "observer error"
-      }));
+      expect(spyObserver.error).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: 'observer error',
+        }),
+      );
       expect(spyObserver.complete).not.toHaveBeenCalled();
       expect(tearDownSpy).toHaveBeenCalled();
     });
   });
 
-  describe("upon complete in the source observable", () => {
-    test("should complete in the filtered observables", () => {
+  describe('upon complete in the source observable', () => {
+    test('should complete in the filtered observables', () => {
       const spyObserver = newSpyObserver();
       const subscription = evenNumbers.subscribe(spyObserver);
 
@@ -84,5 +85,4 @@ describe("filter operator", () => {
       expect(tearDownSpy).toHaveBeenCalled();
     });
   });
-
 });

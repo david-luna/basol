@@ -1,5 +1,5 @@
-import { Observable } from "../observable";
-import { OperatorFunction } from "../types";
+import { Observable } from '../observable';
+import { OperatorFunction } from '../types';
 
 /**
  * Returns a function which transforms a source observable to a new one which emits values resulting
@@ -10,7 +10,7 @@ import { OperatorFunction } from "../types";
  */
 export function map<T, R>(project: (value: T) => R): OperatorFunction<T, R> {
   return (source: Observable<T>): Observable<R> => {
-    return new Observable<R>(observer => {
+    return new Observable<R>((observer) => {
       const sourceSubscription = source.subscribe({
         next: (value) => {
           observer.next(project(value));
@@ -20,7 +20,7 @@ export function map<T, R>(project: (value: T) => R): OperatorFunction<T, R> {
         },
         complete: () => {
           observer.complete();
-        }
+        },
       });
 
       return () => {

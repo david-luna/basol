@@ -1,4 +1,4 @@
-import { Observable } from "../observable";
+import { Observable } from '../observable';
 
 export interface EventListenerObject<E> {
   handleEvent(evt: E): void;
@@ -8,12 +8,12 @@ export interface HasEventTargetAddRemove<E> {
   addEventListener(
     type: string,
     listener: ((evt: E) => void) | EventListenerObject<E> | null,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ): void;
   removeEventListener(
     type: string,
     listener: ((evt: E) => void) | EventListenerObject<E> | null,
-    options?: EventListenerOptions | boolean
+    options?: EventListenerOptions | boolean,
   ): void;
 }
 

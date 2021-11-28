@@ -1,4 +1,4 @@
-import { Observable } from "../observable";
+import { Observable } from '../observable';
 
 /**
  * Creates an observable emiting the params in order
