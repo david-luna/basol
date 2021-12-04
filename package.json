@@ -1,13 +1,13 @@
 {
-  "name": "yaol",
+  "name": "basol",
   "version": "0.0.1",
-  "description": "Yet Another Observable Library",
+  "description": "Basic Observable Library",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
   "types": "./lib/index.d.ts",
   "files": [
     "lib"
-  ],
+  ],  
   "scripts": {
     "build": "npm run build-browser && npm run build-node",
     "build-browser": "tsc -p tsconfig.browser.json",
