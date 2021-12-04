@@ -1,6 +1,6 @@
 # yaol
 
-Yet another observer lib
+Basic observer library
 
 ## Summary
 
