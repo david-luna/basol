@@ -22,15 +22,15 @@ export function merge<A, B, C, D, E>(
  * @param observables list of observables to merge
  * @returns an observable which emit all values incoming from all observables
  */
-export function merge(...observables: Observable<any>[]): Observable<any> {
-  return new Observable<any>((observer) => {
+export function merge(...observables: Observable<unknown>[]): Observable<unknown> {
+  return new Observable<unknown>((observer) => {
     const innerSubscriptions: Subscription[] = [];
     let completedSubscriptions = 0;
     const innerObserver = {
-      next: (value: any) => {
+      next: (value: unknown) => {
         observer.next(value);
       },
-      error: (err: any) => {
+      error: (err: unknown) => {
         observer.error(err);
       },
       complete: () => {
@@ -41,11 +41,13 @@ export function merge(...observables: Observable<any>[]): Observable<any> {
       },
     };
 
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let i = 0; i < observables.length; i++) {
       innerSubscriptions.push(observables[i].subscribe(innerObserver));
     }
 
     return () => {
+      // eslint-disable-next-line @typescript-eslint/prefer-for-of
       for (let i = 0; i < innerSubscriptions.length; i++) {
         innerSubscriptions[i].unsubscribe();
       }

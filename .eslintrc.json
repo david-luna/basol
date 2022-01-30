@@ -10,7 +10,7 @@
     ],
     "rules": {
       "prefer-arrow-callback": "error",
-      "func-style": ["error", "expression"],
+      "func-style": ["error", "declaration", { "allowArrowFunctions": true }],
       "no-param-reassign": "error",
       "no-shadow": "error",
       "no-console": "error",
