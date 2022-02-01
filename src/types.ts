@@ -46,5 +46,7 @@ export type OperatorFunction<T, R> = UnaryFunction<Observable<T>, Observable<R>>
  * Valid types that can be converted to observables.
  * TODO: add more input types like Iterable<T> | AsyncIterable<T>
  */
-
 export type ObservableInput<T> = Observable<T> | PromiseLike<T> | ArrayLike<T>;
+
+// Extract type from iterable
+export type ObservedValueOf<O> = O extends ObservableInput<infer T> ? T : never;

@@ -1,6 +1,6 @@
 {
   "name": "basol",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Basic Observable Library",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/david-luna/yaol.git"
+    "url": "git+https://github.com/david-luna/basol.git"
   },
   "keywords": [
     "observable",
