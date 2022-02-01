@@ -1,17 +1,20 @@
 import { Observable } from '../observable';
 import { ObservableInput } from '../types';
 
-const isPromiseLike = function isPromiseLike(target: any): target is PromiseLike<unknown> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function isPromiseLike(target: any): target is PromiseLike<unknown> {
   return typeof target?.then === 'function';
-};
+}
 
-const isArrayLike = function isArrayLike(target: any): target is ArrayLike<unknown> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function isArrayLike(target: any): target is ArrayLike<unknown> {
   return typeof target?.length === 'number';
-};
+}
 
-const isObservable = function isObservable(target: any): target is Observable<unknown> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function isObservable(target: any): target is Observable<unknown> {
   return typeof target?.subscribe === 'function';
-};
+}
 
 /**
  * Creates an observable from a promise
@@ -41,6 +44,7 @@ function fromPromise<T>(promise: PromiseLike<T>): Observable<T> {
  */
 function fromArray<T>(array: ArrayLike<T>): Observable<T> {
   return new Observable<T>((observer) => {
+    // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let i = 0; i < array.length; i++) {
       observer.next(array[i]);
     }
