@@ -20,14 +20,11 @@ export function switchMap<T, R extends ObservableInput<any>>(
 
       const sourceSubscription = source.subscribe({
         next: (value) => {
+          const { complete, ...partial } = observer;
           if (innerSubscription) {
             innerSubscription.unsubscribe();
           }
-          innerSubscription = from(project(value, count++)).subscribe({
-            next: (innerVal) => observer.next(innerVal),
-            error: (innerErr) => observer.error(innerErr),
-          });
-          // observer.next();
+          innerSubscription = from(project(value, count++)).subscribe(partial);
         },
         error: (err) => {
           observer.error(err);
