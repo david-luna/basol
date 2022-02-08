@@ -4,6 +4,10 @@ import { Observable } from '../observable';
 import { Observer } from '../types';
 
 describe('switchMap operator', () => {
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
   let nextTrigger: (num: number) => void;
   let errorTrigger: (err: unknown) => void;
   let completeTrigger: () => void;
@@ -137,6 +141,56 @@ describe('switchMap operator', () => {
       expect(spyObserver.next).toHaveBeenCalledTimes(1);
       expect(spyObserver.error).not.toHaveBeenCalled();
       expect(spyObserver.complete).not.toHaveBeenCalled();
+      expect(tearDownSpy).toHaveBeenCalled();
+      /* eslint-enable @typescript-eslint/no-magic-numbers */
+    });
+
+    test('should unsubscribe inner observable and crate a new one when source emits', () => {
+      jest.useFakeTimers();
+      const setIntervalSpy = jest.spyOn(global, 'setInterval');
+      const clearIntervalSpy = jest.spyOn(global, 'clearInterval');
+      // eslint-disable-next-line arrow-body-style
+      const toInterval = switchMap(
+        (x: number) =>
+          new Observable((observer) => {
+            // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+            const signal = setInterval(() => observer.next(x * 1000), 10);
+            return () => clearInterval(signal);
+          }),
+      );
+      const intervalObservable = toInterval(sourceNumbers);
+      const spyObserver = newSpyObserver();
+      const subscription = intervalObservable.subscribe(spyObserver);
+
+      /* eslint-disable @typescript-eslint/no-magic-numbers */
+      nextTrigger(2);
+      jest.advanceTimersByTime(20);
+      expect(setIntervalSpy).toHaveBeenCalledTimes(1);
+      expect(clearIntervalSpy).not.toHaveBeenCalled();
+      expect(spyObserver.next).toHaveBeenNthCalledWith(1, 2000);
+      expect(spyObserver.next).toHaveBeenNthCalledWith(2, 2000);
+      expect(spyObserver.next).toHaveBeenCalledTimes(2);
+      // Emit new value should cancel theprevious interval
+      nextTrigger(3);
+      jest.advanceTimersByTime(20);
+      expect(setIntervalSpy).toHaveBeenCalledTimes(2);
+      expect(clearIntervalSpy).toHaveBeenCalledTimes(1);
+      expect(spyObserver.next).toHaveBeenNthCalledWith(3, 3000);
+      expect(spyObserver.next).toHaveBeenNthCalledWith(4, 3000);
+      expect(spyObserver.next).toHaveBeenCalledTimes(4);
+      // Emit again and check
+      nextTrigger(4);
+      jest.advanceTimersByTime(20);
+      expect(setIntervalSpy).toHaveBeenCalledTimes(3);
+      expect(clearIntervalSpy).toHaveBeenCalledTimes(2);
+      expect(spyObserver.next).toHaveBeenNthCalledWith(5, 4000);
+      expect(spyObserver.next).toHaveBeenNthCalledWith(6, 4000);
+      expect(spyObserver.next).toHaveBeenCalledTimes(6);
+      subscription.unsubscribe();
+
+      expect(spyObserver.error).not.toHaveBeenCalled();
+      expect(spyObserver.complete).not.toHaveBeenCalled();
+      expect(clearIntervalSpy).toHaveBeenCalledTimes(3);
       expect(tearDownSpy).toHaveBeenCalled();
       /* eslint-enable @typescript-eslint/no-magic-numbers */
     });

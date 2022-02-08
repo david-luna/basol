@@ -18,6 +18,7 @@ describe('fromEvent factory', () => {
 
     expect(addListenerSpy).toHaveBeenCalledWith('custom-event', expect.any(Function));
     expect(removeListenerSpy).toHaveBeenCalledWith('custom-event', expect.any(Function));
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
     expect.assertions(5);
   });
 });
