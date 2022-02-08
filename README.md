@@ -12,3 +12,11 @@ Basic observer library
 ## Summary
 
 This is a personal implementation of the observer pattern taking rxjs as a template for its API. This lib does not pretend to be a substitute or competitor of such library but rather a place for experiementation and learning.
+
+The library tries to mimic the same API for producers (here called factories) and operators. Method signatures are extracted from the original [rxjs docs](https://rxjs.dev/guide/operators).
+
+## Release notes
+
+### [0.0.3]
+
+* Add fromEventPattern factory method
