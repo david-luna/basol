@@ -17,6 +17,10 @@ The library tries to mimic the same API for producers (here called factories) an
 
 ## Release notes
 
+### [0.0.4]
+
+* Add combineLatest factory method
+
 ### [0.0.3]
 
 * Add fromEventPattern factory method
