@@ -23,7 +23,7 @@ const newObservableWithSpies = <T>(): ObservableWithSpies<T> => {
     result.triggers.next = (value: T): void => {
       return observer.next(value);
     };
-    result.triggers.error = (err: any) => {
+    result.triggers.error = (err: unknown) => {
       return observer.error(err);
     };
     result.triggers.complete = () => {
@@ -60,15 +60,15 @@ describe('merge factory', () => {
       complete: mergeCompleteSpy,
     });
 
-    numberSpiedObservable.triggers.next!(1);
-    stringSpiedObservable.triggers.next!('one');
-    booleanSpiedObservable.triggers.next!(true);
-    numberSpiedObservable.triggers.next!(2);
-    stringSpiedObservable.triggers.next!('two');
-    booleanSpiedObservable.triggers.next!(false);
-    numberSpiedObservable.triggers.next!(3);
-    stringSpiedObservable.triggers.next!('three');
-    booleanSpiedObservable.triggers.next!(true);
+    numberSpiedObservable.triggers.next?.(1);
+    stringSpiedObservable.triggers.next?.('one');
+    booleanSpiedObservable.triggers.next?.(true);
+    numberSpiedObservable.triggers.next?.(2);
+    stringSpiedObservable.triggers.next?.('two');
+    booleanSpiedObservable.triggers.next?.(false);
+    numberSpiedObservable.triggers.next?.(3);
+    stringSpiedObservable.triggers.next?.('three');
+    booleanSpiedObservable.triggers.next?.(true);
 
     expect(mergeNextSpy).toHaveBeenNthCalledWith(1, 1);
     expect(mergeNextSpy).toHaveBeenNthCalledWith(2, 'one');
@@ -106,13 +106,13 @@ describe('merge factory', () => {
       complete: mergeCompleteSpy,
     });
 
-    numberSpiedObservable.triggers.next!(1);
-    stringSpiedObservable.triggers.next!('one');
-    booleanSpiedObservable.triggers.next!(true);
-    numberSpiedObservable.triggers.next!(2);
-    stringSpiedObservable.triggers.next!('two');
-    numberSpiedObservable.triggers.error!(new Error('some error'));
-    booleanSpiedObservable.triggers.next!(false);
+    numberSpiedObservable.triggers.next?.(1);
+    stringSpiedObservable.triggers.next?.('one');
+    booleanSpiedObservable.triggers.next?.(true);
+    numberSpiedObservable.triggers.next?.(2);
+    stringSpiedObservable.triggers.next?.('two');
+    numberSpiedObservable.triggers.error?.(new Error('some error'));
+    booleanSpiedObservable.triggers.next?.(false);
 
     expect(mergeNextSpy).toHaveBeenNthCalledWith(1, 1);
     expect(mergeNextSpy).toHaveBeenNthCalledWith(2, 'one');
@@ -152,18 +152,18 @@ describe('merge factory', () => {
       complete: mergeCompleteSpy,
     });
 
-    numberSpiedObservable.triggers.next!(1);
-    stringSpiedObservable.triggers.next!('one');
-    booleanSpiedObservable.triggers.next!(true);
-    numberSpiedObservable.triggers.next!(2);
-    stringSpiedObservable.triggers.next!('two');
+    numberSpiedObservable.triggers.next?.(1);
+    stringSpiedObservable.triggers.next?.('one');
+    booleanSpiedObservable.triggers.next?.(true);
+    numberSpiedObservable.triggers.next?.(2);
+    stringSpiedObservable.triggers.next?.('two');
 
-    numberSpiedObservable.triggers.complete!();
-    stringSpiedObservable.triggers.complete!();
+    numberSpiedObservable.triggers.complete?.();
+    stringSpiedObservable.triggers.complete?.();
     expect(mergeCompleteSpy).not.toHaveBeenCalled();
 
-    booleanSpiedObservable.triggers.next!(false);
-    booleanSpiedObservable.triggers.next!(true);
+    booleanSpiedObservable.triggers.next?.(false);
+    booleanSpiedObservable.triggers.next?.(true);
 
     expect(mergeNextSpy).toHaveBeenNthCalledWith(1, 1);
     expect(mergeNextSpy).toHaveBeenNthCalledWith(2, 'one');
@@ -173,7 +173,7 @@ describe('merge factory', () => {
     expect(mergeNextSpy).toHaveBeenNthCalledWith(6, false);
     expect(mergeNextSpy).toHaveBeenNthCalledWith(7, true);
 
-    booleanSpiedObservable.triggers.complete!();
+    booleanSpiedObservable.triggers.complete?.();
     expect(mergeCompleteSpy).toHaveBeenCalled();
 
     subscription.unsubscribe();
