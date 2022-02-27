@@ -28,6 +28,7 @@ export function concat(...observables: Observable<unknown>[]): Observable<unknow
         observer.next(value);
       },
       error: (err: unknown) => {
+        console.error(err.message);
         observer.error(err);
       },
       complete: () => {
@@ -36,7 +37,6 @@ export function concat(...observables: Observable<unknown>[]): Observable<unknow
         if (observables.length === 0) {
           observer.complete();
         } else {
-          console.log('next subscription');
           activeSubscription = observables[0].subscribe(innerObserver);
         }
       },
