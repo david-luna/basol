@@ -112,7 +112,7 @@ describe('concat factory', () => {
     stringSpiedObservable.triggers.next?.('one');
     booleanSpiedObservable.triggers.next?.(true);
     stringSpiedObservable.triggers.next?.('two');
-    numberSpiedObservable.triggers.error?.(new Error('some error'));
+    stringSpiedObservable.triggers.error?.(new Error('some error'));
     booleanSpiedObservable.triggers.next?.(false);
 
     expect(concatNextSpy).toHaveBeenNthCalledWith(1, 1);
@@ -125,12 +125,12 @@ describe('concat factory', () => {
         message: 'some error',
       }),
     );
-    expect(concatErrorSpy).not.toHaveBeenCalled();
+    expect(concatErrorSpy).toHaveBeenCalled();
 
     subscription.unsubscribe();
     expect(numberSpiedObservable.spies.tearDown).toHaveBeenCalled();
     expect(stringSpiedObservable.spies.tearDown).toHaveBeenCalled();
-    expect(booleanSpiedObservable.spies.tearDown).toHaveBeenCalled();
+    expect(booleanSpiedObservable.spies.tearDown).not.toHaveBeenCalled();
   });
 
   test('should create an observable which does complete until all sources complete', () => {
@@ -178,6 +178,5 @@ describe('concat factory', () => {
     expect(numberSpiedObservable.spies.tearDown).toHaveBeenCalled();
     expect(stringSpiedObservable.spies.tearDown).toHaveBeenCalled();
     expect(booleanSpiedObservable.spies.tearDown).toHaveBeenCalled();
-  });
-  
+  });  
 });
