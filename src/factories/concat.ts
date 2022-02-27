@@ -28,7 +28,7 @@ export function concat(...observables: Observable<unknown>[]): Observable<unknow
         observer.next(value);
       },
       error: (err: unknown) => {
-        console.error(err.message);
+        console.error('err', err);
         observer.error(err);
       },
       complete: () => {
