@@ -1,6 +1,6 @@
 {
   "name": "basol",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Basic Observable Library",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
