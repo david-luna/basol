@@ -7,7 +7,7 @@
   "types": "./lib/index.d.ts",
   "files": [
     "lib"
-  ],  
+  ],
   "scripts": {
     "build": "npm run build-browser && npm run build-node",
     "build-browser": "tsc -p tsconfig.browser.json",
