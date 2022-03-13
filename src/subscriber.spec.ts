@@ -1,15 +1,14 @@
 import { Subscriber } from './subscriber';
+import { Observer } from './types';
+import { newSpyObserver } from './__test__';
 
 describe('Subscriber', () => {
   let subscription: Subscriber<number>;
-  const spyObserver = {
-    next: jest.fn(),
-    error: jest.fn(),
-    complete: jest.fn(),
-  };
+  let spyObserver: Observer<unknown>;
   const tearDownSpy = jest.fn();
 
   beforeEach(() => {
+    spyObserver = newSpyObserver();
     subscription = new Subscriber<number>(spyObserver, tearDownSpy);
   });
 

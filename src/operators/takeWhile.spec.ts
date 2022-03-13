@@ -1,7 +1,7 @@
 import { Observable } from '../observable';
 import { Observer } from '../types';
-import { newSpyObserver } from '../__test__';
 import { takeWhile } from './takeWhile';
+import { newSpyObserver } from '../__test__';
 
 describe('takeWhile operator', () => {
   let nextTrigger: (num: number) => void;

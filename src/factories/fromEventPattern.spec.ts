@@ -1,14 +1,7 @@
 import { EventHandlerLike, fromEventPattern } from './fromEventPattern';
+import { newSpyObserver } from '../__test__';
 
 describe('fromEventPattern factory', () => {
-  const newSpyObserver = () => {
-    return {
-      next: jest.fn(),
-      error: jest.fn(),
-      complete: jest.fn(),
-    };
-  };
-
   test('should create an observable which emits when an event occurs', () => {
     const divElement = document.createElement('div') as HTMLDivElement;
     const addListenerSpy = jest.spyOn(divElement, 'addEventListener');
