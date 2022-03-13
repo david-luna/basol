@@ -1,5 +1,5 @@
 import { Observable } from '../observable';
-import { TeardownFunction } from '../types';
+import { Observer, TeardownFunction } from '../types';
 
 export interface ObservableWithSpies<T> {
   observable: Observable<T>;
@@ -36,4 +36,12 @@ export const newObservableWithSpies = <T>(): ObservableWithSpies<T> => {
   result.observable = observable;
 
   return result;
+};
+
+export const newSpyObserver = (): Observer<unknown> => {
+  return {
+    next: jest.fn(),
+    error: jest.fn(),
+    complete: jest.fn(),
+  };
 };

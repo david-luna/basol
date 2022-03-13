@@ -1,6 +1,7 @@
 import { map } from './map';
 import { Observable } from '../observable';
 import { Observer } from '../types';
+import { newSpyObserver } from '../__test__';
 
 describe('map operator', () => {
   let nextTrigger: (num: number) => void;
@@ -20,13 +21,7 @@ describe('map operator', () => {
 
     return tearDownSpy;
   });
-  const newSpyObserver = () => {
-    return {
-      next: jest.fn(),
-      error: jest.fn(),
-      complete: jest.fn(),
-    };
-  };
+
   // eslint-disable-next-line arrow-body-style
   const toSquared = map((x: number) => x * x);
   const squaredNumbers = toSquared(sourceNumbers);

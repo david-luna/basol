@@ -1,6 +1,7 @@
 import { filter } from './filter';
 import { Observable } from '../observable';
 import { Observer } from '../types';
+import { newSpyObserver } from '../__test__';
 
 describe('filter operator', () => {
   let nextTrigger: (num: number) => void;
@@ -20,13 +21,7 @@ describe('filter operator', () => {
 
     return tearDownSpy;
   });
-  const newSpyObserver = () => {
-    return {
-      next: jest.fn(),
-      error: jest.fn(),
-      complete: jest.fn(),
-    };
-  };
+
   // eslint-disable-next-line arrow-body-style
   const toEven = filter((x: number) => x % 2 === 0);
   const evenNumbers = toEven(sourceNumbers);

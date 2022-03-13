@@ -1,5 +1,6 @@
 import { Observable } from '../observable';
 import { Observer } from '../types';
+import { newSpyObserver } from '../__test__';
 import { takeWhile } from './takeWhile';
 
 describe('takeWhile operator', () => {
@@ -20,13 +21,7 @@ describe('takeWhile operator', () => {
 
     return tearDownSpy;
   });
-  const newSpyObserver = () => {
-    return {
-      next: jest.fn(),
-      error: jest.fn(),
-      complete: jest.fn(),
-    };
-  };
+
   // eslint-disable-next-line arrow-body-style
   const lowSquares = takeWhile<number>((value, index) => Math.pow(value, 2) < 100);
   const squaresBelowhundred = lowSquares(sourceNumbers);

@@ -2,6 +2,7 @@ import { switchMap } from './switchMap';
 import { of } from '../factories/of';
 import { Observable } from '../observable';
 import { Observer } from '../types';
+import { newSpyObserver } from '../__test__';
 
 describe('switchMap operator', () => {
   afterEach(() => {
@@ -27,13 +28,6 @@ describe('switchMap operator', () => {
 
     return tearDownSpy;
   });
-  const newSpyObserver = () => {
-    return {
-      next: jest.fn(),
-      error: jest.fn(),
-      complete: jest.fn(),
-    };
-  };
 
   describe('upon emitted value in the source observable', () => {
     test('should emit mapped values with a single function', () => {

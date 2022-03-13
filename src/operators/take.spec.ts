@@ -1,5 +1,6 @@
 import { Observable } from '../observable';
 import { Observer } from '../types';
+import { newSpyObserver } from '../__test__';
 import { take } from './take';
 
 describe('take operator', () => {
@@ -20,13 +21,7 @@ describe('take operator', () => {
 
     return tearDownSpy;
   });
-  const newSpyObserver = () => {
-    return {
-      next: jest.fn(),
-      error: jest.fn(),
-      complete: jest.fn(),
-    };
-  };
+
   // eslint-disable-next-line arrow-body-style
   const takeTwo = take<number>(2);
   const firstAndSecond = takeTwo(sourceNumbers);
