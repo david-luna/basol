@@ -15,9 +15,16 @@ This is a personal implementation of the observer pattern taking rxjs as a templ
 
 The library tries to mimic the same API for producers (here called factories) and operators. Method signatures are extracted from the original [rxjs docs](https://rxjs.dev/guide/operators).
 
+Tests try to be as accurate as possible but the behavior may differ. Also the implementations of the factories and
+operators do not use utils and I tried to avoid any internal dependency.
+
 ## Release notes
 
-### [0.0.4]
+### [0.2.0]
+
+* Add withLatestFrom operator
+
+### [0.1.0]
 
 * Add combineLatest factory method
 
