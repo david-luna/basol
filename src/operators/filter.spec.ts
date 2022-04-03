@@ -1,39 +1,22 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { filter } from './filter';
-import { Observable } from '../observable';
-import { Observer } from '../types';
-import { newSpyObserver } from '../__test__';
+import { newObservableWithSpies, newSpyObserver } from '../__test__';
 
 describe('filter operator', () => {
-  let nextTrigger: (num: number) => void;
-  let errorTrigger: (err: any) => void;
-  let completeTrigger: () => void;
-  const tearDownSpy = jest.fn();
-  const sourceNumbers = new Observable<number>((observer: Observer<number>) => {
-    nextTrigger = (num: number) => {
-      return observer.next(num);
-    };
-    errorTrigger = (err: any) => {
-      return observer.error(err);
-    };
-    completeTrigger = () => {
-      return observer.complete();
-    };
-
-    return tearDownSpy;
-  });
+  const sourceNumbers = newObservableWithSpies<number>();
 
   // eslint-disable-next-line arrow-body-style
   const toEven = filter((x: number) => x % 2 === 0);
-  const evenNumbers = toEven(sourceNumbers);
+  const evenNumbers = toEven(sourceNumbers.observable);
 
   describe('upon emitted value in the source observable', () => {
     test('should emit the filtered values', () => {
       const spyObserver = newSpyObserver();
       const subscription = evenNumbers.subscribe(spyObserver);
 
-      nextTrigger(2);
-      nextTrigger(3);
-      nextTrigger(4);
+      sourceNumbers.triggers.next?.(2);
+      sourceNumbers.triggers.next?.(3);
+      sourceNumbers.triggers.next?.(4);
       subscription.unsubscribe();
 
       expect(spyObserver.next).toHaveBeenCalledWith(2);
@@ -41,7 +24,7 @@ describe('filter operator', () => {
       expect(spyObserver.next).toHaveBeenCalledTimes(2);
       expect(spyObserver.error).not.toHaveBeenCalled();
       expect(spyObserver.complete).not.toHaveBeenCalled();
-      expect(tearDownSpy).toHaveBeenCalled();
+      expect(sourceNumbers.spies.tearDown).toHaveBeenCalled();
     });
   });
 
@@ -50,8 +33,8 @@ describe('filter operator', () => {
       const spyObserver = newSpyObserver();
       const subscription = evenNumbers.subscribe(spyObserver);
 
-      nextTrigger(2);
-      errorTrigger(new Error('observer error'));
+      sourceNumbers.triggers.next?.(2);
+      sourceNumbers.triggers.error?.(new Error('observer error'));
       subscription.unsubscribe();
 
       expect(spyObserver.next).toHaveBeenCalledWith(2);
@@ -61,7 +44,7 @@ describe('filter operator', () => {
         }),
       );
       expect(spyObserver.complete).not.toHaveBeenCalled();
-      expect(tearDownSpy).toHaveBeenCalled();
+      expect(sourceNumbers.spies.tearDown).toHaveBeenCalled();
     });
   });
 
@@ -70,14 +53,14 @@ describe('filter operator', () => {
       const spyObserver = newSpyObserver();
       const subscription = evenNumbers.subscribe(spyObserver);
 
-      nextTrigger(2);
-      completeTrigger();
+      sourceNumbers.triggers.next?.(2);
+      sourceNumbers.triggers.complete?.();
       subscription.unsubscribe();
 
       expect(spyObserver.next).toHaveBeenCalledWith(2);
       expect(spyObserver.error).not.toHaveBeenCalled();
       expect(spyObserver.complete).toHaveBeenCalled();
-      expect(tearDownSpy).toHaveBeenCalled();
+      expect(sourceNumbers.spies.tearDown).toHaveBeenCalled();
     });
   });
 });

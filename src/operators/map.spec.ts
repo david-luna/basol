@@ -1,41 +1,22 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { map } from './map';
-import { Observable } from '../observable';
-import { Observer } from '../types';
-import { newSpyObserver } from '../__test__';
+import { newObservableWithSpies, newSpyObserver } from '../__test__';
 
 describe('map operator', () => {
-  let nextTrigger: (num: number) => void;
-  let errorTrigger: (err: unknown) => void;
-  let completeTrigger: () => void;
-  const tearDownSpy = jest.fn();
-  const sourceNumbers = new Observable<number>((observer: Observer<number>) => {
-    nextTrigger = (num: number) => {
-      return observer.next(num);
-    };
-    errorTrigger = (err: unknown) => {
-      return observer.error(err);
-    };
-    completeTrigger = () => {
-      return observer.complete();
-    };
-
-    return tearDownSpy;
-  });
+  const sourceNumbers = newObservableWithSpies<number>();
 
   // eslint-disable-next-line arrow-body-style
   const toSquared = map((x: number) => x * x);
-  const squaredNumbers = toSquared(sourceNumbers);
+  const squaredNumbers = toSquared(sourceNumbers.observable);
 
   describe('upon emitted value in the source observable', () => {
     test('should emit the mapped values', () => {
       const spyObserver = newSpyObserver();
       const subscription = squaredNumbers.subscribe(spyObserver);
 
-      /* eslint-disable @typescript-eslint/no-magic-numbers */
-      nextTrigger(2);
-      nextTrigger(3);
-      nextTrigger(4);
-      /* eslint-enable @typescript-eslint/no-magic-numbers */
+      sourceNumbers.triggers.next?.(2);
+      sourceNumbers.triggers.next?.(3);
+      sourceNumbers.triggers.next?.(4);
       subscription.unsubscribe();
 
       expect(spyObserver.next).toHaveBeenCalledWith(4);
@@ -43,7 +24,7 @@ describe('map operator', () => {
       expect(spyObserver.next).toHaveBeenCalledWith(16);
       expect(spyObserver.error).not.toHaveBeenCalled();
       expect(spyObserver.complete).not.toHaveBeenCalled();
-      expect(tearDownSpy).toHaveBeenCalled();
+      expect(sourceNumbers.spies.tearDown).toHaveBeenCalled();
     });
   });
 
@@ -52,8 +33,8 @@ describe('map operator', () => {
       const spyObserver = newSpyObserver();
       const subscription = squaredNumbers.subscribe(spyObserver);
 
-      nextTrigger(2);
-      errorTrigger(new Error('observer error'));
+      sourceNumbers.triggers.next?.(2);
+      sourceNumbers.triggers.error?.(new Error('observer error'));
       subscription.unsubscribe();
 
       expect(spyObserver.next).toHaveBeenCalledWith(4);
@@ -63,7 +44,7 @@ describe('map operator', () => {
         }),
       );
       expect(spyObserver.complete).not.toHaveBeenCalled();
-      expect(tearDownSpy).toHaveBeenCalled();
+      expect(sourceNumbers.spies.tearDown).toHaveBeenCalled();
     });
   });
 
@@ -72,14 +53,14 @@ describe('map operator', () => {
       const spyObserver = newSpyObserver();
       const subscription = squaredNumbers.subscribe(spyObserver);
 
-      nextTrigger(2);
-      completeTrigger();
+      sourceNumbers.triggers.next?.(2);
+      sourceNumbers.triggers.complete?.();
       subscription.unsubscribe();
 
       expect(spyObserver.next).toHaveBeenCalledWith(4);
       expect(spyObserver.error).not.toHaveBeenCalled();
       expect(spyObserver.complete).toHaveBeenCalled();
-      expect(tearDownSpy).toHaveBeenCalled();
+      expect(sourceNumbers.spies.tearDown).toHaveBeenCalled();
     });
   });
 });

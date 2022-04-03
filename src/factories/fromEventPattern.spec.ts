@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { EventHandlerLike, fromEventPattern } from './fromEventPattern';
 import { newSpyObserver } from '../__test__';
 
@@ -27,7 +29,6 @@ describe('fromEventPattern factory', () => {
     expect(spyObserver.next).toHaveBeenCalledWith(expect.objectContaining({ detail: 2 }));
     expect(spyObserver.next).toHaveBeenCalledWith(expect.objectContaining({ detail: 3 }));
     expect(removeListenerSpy).toHaveBeenCalledWith('custom-event', expect.any(Function));
-    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   });
 
   test('should create an observable with a projection', () => {
@@ -43,7 +44,6 @@ describe('fromEventPattern factory', () => {
       divElement.removeEventListener('custom-event', handler);
     }
     function project(event: { detail: number }): number {
-      // eslint-disable-next-line @typescript-eslint/no-magic-numbers
       return event.detail * 1000;
     }
 
@@ -55,13 +55,10 @@ describe('fromEventPattern factory', () => {
     subscription.unsubscribe();
 
     expect(addListenerSpy).toHaveBeenCalledWith('custom-event', expect.any(Function));
-    /* eslint-disable @typescript-eslint/no-magic-numbers */
     expect(spyObserver.next).toHaveBeenCalledWith(1000);
     expect(spyObserver.next).toHaveBeenCalledWith(2000);
     expect(spyObserver.next).toHaveBeenCalledWith(3000);
-    /* eslint-enable @typescript-eslint/no-magic-numbers */
     expect(removeListenerSpy).toHaveBeenCalledWith('custom-event', expect.any(Function));
-    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   });
 
   test('should pass the signal for removing event listener', () => {
@@ -71,7 +68,6 @@ describe('fromEventPattern factory', () => {
     const spyObserver = newSpyObserver();
     let count = 0;
 
-    /* eslint-disable @typescript-eslint/no-magic-numbers */
     function addHandler(handler: EventHandlerLike) {
       return setInterval(() => handler(++count), 10);
     }
@@ -88,8 +84,6 @@ describe('fromEventPattern factory', () => {
     expect(spyObserver.next).toHaveBeenCalledWith(1);
     expect(spyObserver.next).toHaveBeenCalledWith(2);
     expect(spyObserver.next).toHaveBeenCalledWith(3);
-    /* eslint-enable @typescript-eslint/no-magic-numbers */
     expect(clearIntervalSpy).toHaveBeenCalledWith(expect.any(Number));
-    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   });
 });

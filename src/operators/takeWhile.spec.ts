@@ -1,41 +1,24 @@
-import { Observable } from '../observable';
-import { Observer } from '../types';
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { takeWhile } from './takeWhile';
-import { newSpyObserver } from '../__test__';
+import { newObservableWithSpies, newSpyObserver } from '../__test__';
 
 describe('takeWhile operator', () => {
-  let nextTrigger: (num: number) => void;
-  let errorTrigger: (err: any) => void;
-  let completeTrigger: () => void;
-  const tearDownSpy = jest.fn();
-  const sourceNumbers = new Observable<number>((observer: Observer<number>) => {
-    nextTrigger = (num: number) => {
-      return observer.next(num);
-    };
-    errorTrigger = (err: any) => {
-      return observer.error(err);
-    };
-    completeTrigger = () => {
-      return observer.complete();
-    };
-
-    return tearDownSpy;
-  });
+  const sourceNumbers = newObservableWithSpies<number>();
 
   // eslint-disable-next-line arrow-body-style
-  const lowSquares = takeWhile<number>((value, index) => Math.pow(value, 2) < 100);
-  const squaresBelowhundred = lowSquares(sourceNumbers);
+  const lowSquares = takeWhile<number>((value) => Math.pow(value, 2) < 100);
+  const squaresBelowhundred = lowSquares(sourceNumbers.observable);
 
   describe('upon emitted value in the source observable', () => {
     test('should emit values if they pass the predicate', () => {
       const spyObserver = newSpyObserver();
       const subscription = squaresBelowhundred.subscribe(spyObserver);
 
-      nextTrigger(1);
-      nextTrigger(2);
-      nextTrigger(3);
-      nextTrigger(4);
-      completeTrigger();
+      sourceNumbers.triggers.next?.(1);
+      sourceNumbers.triggers.next?.(2);
+      sourceNumbers.triggers.next?.(3);
+      sourceNumbers.triggers.next?.(4);
+      sourceNumbers.triggers.complete?.();
       subscription.unsubscribe();
 
       expect(spyObserver.next).toHaveBeenCalledWith(1);
@@ -43,7 +26,7 @@ describe('takeWhile operator', () => {
       expect(spyObserver.next).toHaveBeenCalledTimes(4);
       expect(spyObserver.error).not.toHaveBeenCalled();
       expect(spyObserver.complete).toHaveBeenCalled();
-      expect(tearDownSpy).toHaveBeenCalled();
+      expect(sourceNumbers.spies.tearDown).toHaveBeenCalled();
     });
 
     test('should emit values until the predicate fails', () => {
@@ -51,7 +34,8 @@ describe('takeWhile operator', () => {
       const subscription = squaresBelowhundred.subscribe(spyObserver);
       const values = [...new Array(10)].map((v, i) => i + 1);
 
-      values.forEach(nextTrigger);
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      values.forEach(sourceNumbers.triggers.next!);
       subscription.unsubscribe();
 
       values
@@ -61,17 +45,17 @@ describe('takeWhile operator', () => {
         });
       expect(spyObserver.error).not.toHaveBeenCalled();
       expect(spyObserver.complete).toHaveBeenCalled();
-      expect(tearDownSpy).toHaveBeenCalled();
+      expect(sourceNumbers.spies.tearDown).toHaveBeenCalled();
     });
 
     test('should emit values until the predicate fails including the last one', () => {
       const lowSquaresIncluding = takeWhile<number>((value, index) => Math.pow(value, 2) < 100, true);
-      const squaresBelowhundredIncluding = lowSquaresIncluding(sourceNumbers);
+      const squaresBelowhundredIncluding = lowSquaresIncluding(sourceNumbers.observable);
       const spyObserver = newSpyObserver();
       const subscription = squaresBelowhundredIncluding.subscribe(spyObserver);
       const values = [...new Array(10)].map((v, i) => i + 1);
 
-      values.forEach(nextTrigger);
+      values.forEach(sourceNumbers.triggers.next!);
       subscription.unsubscribe();
 
       values.forEach((v) => {
@@ -79,7 +63,7 @@ describe('takeWhile operator', () => {
       });
       expect(spyObserver.error).not.toHaveBeenCalled();
       expect(spyObserver.complete).toHaveBeenCalled();
-      expect(tearDownSpy).toHaveBeenCalled();
+      expect(sourceNumbers.spies.tearDown).toHaveBeenCalled();
     });
   });
 
@@ -88,9 +72,9 @@ describe('takeWhile operator', () => {
       const spyObserver = newSpyObserver();
       const subscription = squaresBelowhundred.subscribe(spyObserver);
 
-      nextTrigger(1);
-      errorTrigger(new Error('observer error'));
-      nextTrigger(2);
+      sourceNumbers.triggers.next?.(1);
+      sourceNumbers.triggers.error?.(new Error('observer error'));
+      sourceNumbers.triggers.next?.(2);
       subscription.unsubscribe();
 
       expect(spyObserver.next).toHaveBeenCalledWith(1);
@@ -101,17 +85,17 @@ describe('takeWhile operator', () => {
         }),
       );
       expect(spyObserver.complete).not.toHaveBeenCalled();
-      expect(tearDownSpy).toHaveBeenCalled();
+      expect(sourceNumbers.spies.tearDown).toHaveBeenCalled();
     });
 
     test('should complete if occurs after picking all the values', () => {
       const spyObserver = newSpyObserver();
       const subscription = squaresBelowhundred.subscribe(spyObserver);
 
-      nextTrigger(1);
-      nextTrigger(2);
-      nextTrigger(3);
-      errorTrigger(new Error('observer error'));
+      sourceNumbers.triggers.next?.(1);
+      sourceNumbers.triggers.next?.(2);
+      sourceNumbers.triggers.next?.(3);
+      sourceNumbers.triggers.error?.(new Error('observer error'));
       subscription.unsubscribe();
 
       expect(spyObserver.next).toHaveBeenCalledWith(1);
@@ -120,7 +104,7 @@ describe('takeWhile operator', () => {
       expect(spyObserver.next).toHaveBeenCalledTimes(3);
       expect(spyObserver.error).toHaveBeenCalled();
       expect(spyObserver.complete).not.toHaveBeenCalled();
-      expect(tearDownSpy).toHaveBeenCalled();
+      expect(sourceNumbers.spies.tearDown).toHaveBeenCalled();
     });
   });
 
@@ -129,31 +113,31 @@ describe('takeWhile operator', () => {
       const spyObserver = newSpyObserver();
       const subscription = squaresBelowhundred.subscribe(spyObserver);
 
-      completeTrigger();
-      nextTrigger(1);
-      nextTrigger(2);
+      sourceNumbers.triggers.complete?.();
+      sourceNumbers.triggers.next?.(1);
+      sourceNumbers.triggers.next?.(2);
       subscription.unsubscribe();
 
       expect(spyObserver.next).toHaveBeenCalledTimes(0);
       expect(spyObserver.error).not.toHaveBeenCalled();
       expect(spyObserver.complete).toHaveBeenCalled();
-      expect(tearDownSpy).toHaveBeenCalled();
+      expect(sourceNumbers.spies.tearDown).toHaveBeenCalled();
     });
 
     test('should complete if the source observable completes', () => {
       const spyObserver = newSpyObserver();
       const subscription = squaresBelowhundred.subscribe(spyObserver);
 
-      nextTrigger(1);
-      nextTrigger(2);
-      completeTrigger();
-      nextTrigger(3);
+      sourceNumbers.triggers.next?.(1);
+      sourceNumbers.triggers.next?.(2);
+      sourceNumbers.triggers.complete?.();
+      sourceNumbers.triggers.next?.(3);
       subscription.unsubscribe();
 
       expect(spyObserver.next).toHaveBeenCalledTimes(2);
       expect(spyObserver.error).not.toHaveBeenCalled();
       expect(spyObserver.complete).toHaveBeenCalled();
-      expect(tearDownSpy).toHaveBeenCalled();
+      expect(sourceNumbers.spies.tearDown).toHaveBeenCalled();
     });
   });
 });

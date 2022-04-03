@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { timer } from './timer';
 
 describe('timer factory', () => {
@@ -37,6 +38,7 @@ describe('timer factory', () => {
       complete: completeSpy,
     });
 
+    // TODO: use jest fake timers?
     await new Promise((r) => setTimeout(r, 150));
     expect(nextSpy).not.toHaveBeenCalled();
     expect(errorSpy).not.toHaveBeenCalled();

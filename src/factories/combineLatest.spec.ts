@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { combineLatest } from './combineLatest';
 import { newObservableWithSpies } from '../__test__';
 

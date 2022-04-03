@@ -1,45 +1,28 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { switchMap } from './switchMap';
 import { of } from '../factories/of';
 import { Observable } from '../observable';
-import { Observer } from '../types';
-import { newSpyObserver } from '../__test__';
+import { newObservableWithSpies, newSpyObserver } from '../__test__';
 
 describe('switchMap operator', () => {
   afterEach(() => {
     jest.useRealTimers();
   });
 
-  let nextTrigger: (num: number) => void;
-  let errorTrigger: (err: unknown) => void;
-  let completeTrigger: () => void;
   // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   const flushPromises = () => new Promise((r) => setTimeout(r, 100));
-  const tearDownSpy = jest.fn();
-  const sourceNumbers = new Observable<number>((observer: Observer<number>) => {
-    nextTrigger = (num: number) => {
-      return observer.next(num);
-    };
-    errorTrigger = (err: unknown) => {
-      return observer.error(err);
-    };
-    completeTrigger = () => {
-      return observer.complete();
-    };
-
-    return tearDownSpy;
-  });
+  const sourceNumbers = newObservableWithSpies<number>();
 
   describe('upon emitted value in the source observable', () => {
     test('should emit mapped values with a single function', () => {
       const toArray = switchMap((x: number) => new Array(x).fill(x));
-      const arrayObservable = toArray(sourceNumbers);
+      const arrayObservable = toArray(sourceNumbers.observable);
       const spyObserver = newSpyObserver();
       const subscription = arrayObservable.subscribe(spyObserver);
 
-      /* eslint-disable @typescript-eslint/no-magic-numbers */
-      nextTrigger(2);
-      nextTrigger(3);
-      nextTrigger(4);
+      sourceNumbers.triggers.next?.(2);
+      sourceNumbers.triggers.next?.(3);
+      sourceNumbers.triggers.next?.(4);
       subscription.unsubscribe();
 
       // 1st array
@@ -56,21 +39,18 @@ describe('switchMap operator', () => {
       expect(spyObserver.next).toHaveBeenNthCalledWith(9, 4);
       expect(spyObserver.error).not.toHaveBeenCalled();
       expect(spyObserver.complete).not.toHaveBeenCalled();
-      expect(tearDownSpy).toHaveBeenCalled();
-      /* eslint-enable @typescript-eslint/no-magic-numbers */
+      expect(sourceNumbers.spies.tearDown).toHaveBeenCalled();
     });
     test('should emit the mapped values with an observer projection', () => {
       // eslint-disable-next-line arrow-body-style
-      // eslint-disable-next-line @typescript-eslint/no-magic-numbers
       const toObservable = switchMap((x: number) => of(x, x ** 2, x ** 3));
-      const observableObservable = toObservable(sourceNumbers);
+      const observableObservable = toObservable(sourceNumbers.observable);
       const spyObserver = newSpyObserver();
       const subscription = observableObservable.subscribe(spyObserver);
 
-      /* eslint-disable @typescript-eslint/no-magic-numbers */
-      nextTrigger(2);
-      nextTrigger(3);
-      nextTrigger(4);
+      sourceNumbers.triggers.next?.(2);
+      sourceNumbers.triggers.next?.(3);
+      sourceNumbers.triggers.next?.(4);
       subscription.unsubscribe();
 
       expect(spyObserver.next).toHaveBeenNthCalledWith(1, 2);
@@ -85,24 +65,21 @@ describe('switchMap operator', () => {
       expect(spyObserver.next).toHaveBeenCalledTimes(9);
       expect(spyObserver.error).not.toHaveBeenCalled();
       expect(spyObserver.complete).not.toHaveBeenCalled();
-      expect(tearDownSpy).toHaveBeenCalled();
-      /* eslint-enable @typescript-eslint/no-magic-numbers */
+      expect(sourceNumbers.spies.tearDown).toHaveBeenCalled();
     });
 
     test('should emit the mapped values with a promise projection', async () => {
       // eslint-disable-next-line arrow-body-style
-      // eslint-disable-next-line @typescript-eslint/no-magic-numbers
       const toPromise = switchMap((x: number) => Promise.resolve(x * x));
-      const promiseObservable = toPromise(sourceNumbers);
+      const promiseObservable = toPromise(sourceNumbers.observable);
       const spyObserver = newSpyObserver();
       const subscription = promiseObservable.subscribe(spyObserver);
 
-      /* eslint-disable @typescript-eslint/no-magic-numbers */
-      nextTrigger(2);
+      sourceNumbers.triggers.next?.(2);
       await flushPromises();
-      nextTrigger(3);
+      sourceNumbers.triggers.next?.(3);
       await flushPromises();
-      nextTrigger(4);
+      sourceNumbers.triggers.next?.(4);
       await flushPromises();
       subscription.unsubscribe();
 
@@ -112,22 +89,19 @@ describe('switchMap operator', () => {
       expect(spyObserver.next).toHaveBeenCalledTimes(3);
       expect(spyObserver.error).not.toHaveBeenCalled();
       expect(spyObserver.complete).not.toHaveBeenCalled();
-      expect(tearDownSpy).toHaveBeenCalled();
-      /* eslint-enable @typescript-eslint/no-magic-numbers */
+      expect(sourceNumbers.spies.tearDown).toHaveBeenCalled();
     });
 
     test('should cancel the async value if source emits before', async () => {
       // eslint-disable-next-line arrow-body-style
-      // eslint-disable-next-line @typescript-eslint/no-magic-numbers
       const toPromise = switchMap((x: number) => Promise.resolve(x * x));
-      const promiseObservable = toPromise(sourceNumbers);
+      const promiseObservable = toPromise(sourceNumbers.observable);
       const spyObserver = newSpyObserver();
       const subscription = promiseObservable.subscribe(spyObserver);
 
-      /* eslint-disable @typescript-eslint/no-magic-numbers */
-      nextTrigger(2);
-      nextTrigger(3);
-      nextTrigger(4);
+      sourceNumbers.triggers.next?.(2);
+      sourceNumbers.triggers.next?.(3);
+      sourceNumbers.triggers.next?.(4);
       await flushPromises();
       subscription.unsubscribe();
 
@@ -135,8 +109,7 @@ describe('switchMap operator', () => {
       expect(spyObserver.next).toHaveBeenCalledTimes(1);
       expect(spyObserver.error).not.toHaveBeenCalled();
       expect(spyObserver.complete).not.toHaveBeenCalled();
-      expect(tearDownSpy).toHaveBeenCalled();
-      /* eslint-enable @typescript-eslint/no-magic-numbers */
+      expect(sourceNumbers.spies.tearDown).toHaveBeenCalled();
     });
 
     test('should unsubscribe inner observable and crate a new one when source emits', () => {
@@ -147,17 +120,15 @@ describe('switchMap operator', () => {
       const toInterval = switchMap(
         (x: number) =>
           new Observable((observer) => {
-            // eslint-disable-next-line @typescript-eslint/no-magic-numbers
             const signal = setInterval(() => observer.next(x * 1000), 10);
             return () => clearInterval(signal);
           }),
       );
-      const intervalObservable = toInterval(sourceNumbers);
+      const intervalObservable = toInterval(sourceNumbers.observable);
       const spyObserver = newSpyObserver();
       const subscription = intervalObservable.subscribe(spyObserver);
 
-      /* eslint-disable @typescript-eslint/no-magic-numbers */
-      nextTrigger(2);
+      sourceNumbers.triggers.next?.(2);
       jest.advanceTimersByTime(20);
       expect(setIntervalSpy).toHaveBeenCalledTimes(1);
       expect(clearIntervalSpy).not.toHaveBeenCalled();
@@ -165,7 +136,7 @@ describe('switchMap operator', () => {
       expect(spyObserver.next).toHaveBeenNthCalledWith(2, 2000);
       expect(spyObserver.next).toHaveBeenCalledTimes(2);
       // Emit new value should cancel theprevious interval
-      nextTrigger(3);
+      sourceNumbers.triggers.next?.(3);
       jest.advanceTimersByTime(20);
       expect(setIntervalSpy).toHaveBeenCalledTimes(2);
       expect(clearIntervalSpy).toHaveBeenCalledTimes(1);
@@ -173,7 +144,7 @@ describe('switchMap operator', () => {
       expect(spyObserver.next).toHaveBeenNthCalledWith(4, 3000);
       expect(spyObserver.next).toHaveBeenCalledTimes(4);
       // Emit again and check
-      nextTrigger(4);
+      sourceNumbers.triggers.next?.(4);
       jest.advanceTimersByTime(20);
       expect(setIntervalSpy).toHaveBeenCalledTimes(3);
       expect(clearIntervalSpy).toHaveBeenCalledTimes(2);
@@ -185,54 +156,48 @@ describe('switchMap operator', () => {
       expect(spyObserver.error).not.toHaveBeenCalled();
       expect(spyObserver.complete).not.toHaveBeenCalled();
       expect(clearIntervalSpy).toHaveBeenCalledTimes(3);
-      expect(tearDownSpy).toHaveBeenCalled();
-      /* eslint-enable @typescript-eslint/no-magic-numbers */
+      expect(sourceNumbers.spies.tearDown).toHaveBeenCalled();
     });
   });
 
   describe('upon error in the source observable', () => {
     test('should error in the mapped observables', () => {
       // eslint-disable-next-line arrow-body-style
-      // eslint-disable-next-line @typescript-eslint/no-magic-numbers
       const toIdentity = switchMap((x: number) => [x]);
-      const identityObserver = toIdentity(sourceNumbers);
+      const identityObserver = toIdentity(sourceNumbers.observable);
       const spyObserver = newSpyObserver();
       const subscription = identityObserver.subscribe(spyObserver);
 
-      nextTrigger(2);
-      errorTrigger(new Error('observer error'));
+      sourceNumbers.triggers.next?.(2);
+      sourceNumbers.triggers.error?.(new Error('observer error'));
       subscription.unsubscribe();
 
-      /* eslint-disable @typescript-eslint/no-magic-numbers */
       expect(spyObserver.next).toHaveBeenNthCalledWith(1, 2);
-      /* eslint-enable @typescript-eslint/no-magic-numbers */
       expect(spyObserver.error).toHaveBeenCalledWith(
         expect.objectContaining({
           message: 'observer error',
         }),
       );
       expect(spyObserver.complete).not.toHaveBeenCalled();
-      expect(tearDownSpy).toHaveBeenCalled();
+      expect(sourceNumbers.spies.tearDown).toHaveBeenCalled();
     });
   });
 
   describe('upon complete in the source observable', () => {
     test('should complete in the mapped observables', () => {
       const toIdentity = switchMap((x: number) => [x]);
-      const identityObserver = toIdentity(sourceNumbers);
+      const identityObserver = toIdentity(sourceNumbers.observable);
       const spyObserver = newSpyObserver();
       const subscription = identityObserver.subscribe(spyObserver);
 
-      nextTrigger(2);
-      completeTrigger();
+      sourceNumbers.triggers.next?.(2);
+      sourceNumbers.triggers.complete?.();
       subscription.unsubscribe();
 
-      /* eslint-disable @typescript-eslint/no-magic-numbers */
       expect(spyObserver.next).toHaveBeenNthCalledWith(1, 2);
-      /* eslint-enable @typescript-eslint/no-magic-numbers */
       expect(spyObserver.error).not.toHaveBeenCalled();
       expect(spyObserver.complete).toHaveBeenCalled();
-      expect(tearDownSpy).toHaveBeenCalled();
+      expect(sourceNumbers.spies.tearDown).toHaveBeenCalled();
     });
   });
 });

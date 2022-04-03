@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { concat } from './concat';
 import { newObservableWithSpies } from '../__test__';
 

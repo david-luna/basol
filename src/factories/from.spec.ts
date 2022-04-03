@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { from } from './from';
 import { Observable } from '../observable';
 
 describe('from factory', () => {
   test('should throw an error if the input is not accepted', () => {
     // eslint-disable-next-line arrow-body-style
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect(() => from({} as any)).toThrowError('cannot create an observable for the given input');
   });
 
@@ -81,6 +83,7 @@ describe('from factory', () => {
 
     try {
       await promise;
+      // eslint-disable-next-line no-empty
     } catch (e) {}
 
     expect(nextSpy).not.toHaveBeenCalled();
@@ -92,7 +95,7 @@ describe('from factory', () => {
     );
   });
 
-  test("should return the input if it's an observable", () => {
+  test('should return the input if it is an observable', () => {
     const observableInput = new Observable<boolean>((observer) => {
       observer.next(true);
       observer.complete();

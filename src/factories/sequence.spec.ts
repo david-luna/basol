@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { sequence } from './sequence';
 
 describe('sequence factory', () => {
