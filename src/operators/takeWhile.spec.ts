@@ -55,6 +55,7 @@ describe('takeWhile operator', () => {
       const subscription = squaresBelowhundredIncluding.subscribe(spyObserver);
       const values = [...new Array(10)].map((v, i) => i + 1);
 
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       values.forEach(sourceNumbers.triggers.next!);
       subscription.unsubscribe();
 
