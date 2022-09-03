@@ -12,9 +12,10 @@ jobs:
         with:
           node-version: 14
           registry-url: 'https://registry.npmjs.org'
-      - name: Tests
+      - name: Lint & Tests
         run: |
           npm install
+          npm lint
           npm test
       - name: Coveralls
         uses: coverallsapp/github-action@master
