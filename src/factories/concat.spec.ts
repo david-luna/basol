@@ -141,5 +141,5 @@ describe('concat factory', () => {
     expect(numberSpiedObservable.spies.tearDown).toHaveBeenCalled();
     expect(stringSpiedObservable.spies.tearDown).toHaveBeenCalled();
     expect(booleanSpiedObservable.spies.tearDown).toHaveBeenCalled();
-  });  
+  });
 });

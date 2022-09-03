@@ -32,7 +32,7 @@ describe('timer factory', () => {
     const completeSpy = jest.fn();
     const emitAt = new Date(Date.now() + 1000);
 
-    const subscription = timer(emitAt).subscribe({
+    timer(emitAt).subscribe({
       next: nextSpy,
       error: errorSpy,
       complete: completeSpy,

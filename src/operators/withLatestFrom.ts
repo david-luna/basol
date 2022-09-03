@@ -1,7 +1,7 @@
 import { Observable } from '../observable';
 import { OperatorFunction, Subscription } from '../types';
 
-type ObservableSlot = { subscription: Subscription; value?: unknown, error?: unknown };
+type ObservableSlot = { subscription: Subscription; value?: unknown; error?: unknown };
 
 // eslint-disable-next-line prettier/prettier
 export function withLatestFrom<T, A, B>(

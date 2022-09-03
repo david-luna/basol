@@ -49,7 +49,7 @@ describe('takeWhile operator', () => {
     });
 
     test('should emit values until the predicate fails including the last one', () => {
-      const lowSquaresIncluding = takeWhile<number>((value, index) => Math.pow(value, 2) < 100, true);
+      const lowSquaresIncluding = takeWhile<number>((value) => Math.pow(value, 2) < 100, true);
       const squaresBelowhundredIncluding = lowSquaresIncluding(sourceNumbers.observable);
       const spyObserver = newSpyObserver();
       const subscription = squaresBelowhundredIncluding.subscribe(spyObserver);

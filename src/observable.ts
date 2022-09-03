@@ -116,7 +116,7 @@ export class Observable<T> {
               current.next(value);
             });
           },
-          error: (err: any) => {
+          error: (err: unknown) => {
             this.subscribers.forEach((current) => {
               current.error(err);
             });

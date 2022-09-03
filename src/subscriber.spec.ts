@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { Subscriber } from './subscriber';
 import { Observer } from './types';
 import { newSpyObserver } from './__test__';

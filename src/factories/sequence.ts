@@ -13,12 +13,11 @@ export function sequence<T>(period: number, factory: SequenceFactory<T>): Observ
  * @param period the time between emissions
  * @returns observable
  */
-export function sequence(period = 0, factory = (x: number) => x): Observable<any> {
-  return new Observable<number>((observer) => {
+export function sequence<T>(period = 0, factory = (x: number) => x): Observable<T> {
+  return new Observable<T>((observer) => {
     let index = 0;
-    let value: any;
 
-    const id = setInterval(() => observer.next((value = factory(index++))), period);
+    const id = setInterval(() => observer.next(factory(index++) as unknown as T), period);
 
     return () => {
       clearInterval(id);

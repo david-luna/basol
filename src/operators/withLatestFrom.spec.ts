@@ -15,7 +15,7 @@ describe('withLatestFrom operator', () => {
   let source: ObservableWithSpies<IValue>;
 
   let operator: OperatorFunction<IValue, [IValue, number, string, boolean]>;
-  let observable: Observable<[IValue, number, string, boolean]>
+  let observable: Observable<[IValue, number, string, boolean]>;
 
   beforeEach(() => {
     numbers = newObservableWithSpies();

@@ -20,6 +20,7 @@ export function switchMap<T, R extends ObservableInput<any>>(
 
       const sourceSubscription = source.subscribe({
         next: (value) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { complete, ...partial } = observer;
           if (innerSubscription) {
             innerSubscription.unsubscribe();

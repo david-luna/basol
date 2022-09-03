@@ -4,25 +4,25 @@ export type TeardownFunction = () => void;
 
 export interface Observer<T> {
   next: (value: T) => void;
-  error: (error: any) => void;
+  error: (error: unknown) => void;
   complete: () => void;
 }
 
 export interface ObserverNext<T> {
   next: (value: T) => void;
-  error?: (error: any) => void;
+  error?: (error: unknown) => void;
   complete?: () => void;
 }
 
 export interface ObserverError<T> {
   next?: (value: T) => void;
-  error: (error: any) => void;
+  error: (error: unknown) => void;
   complete?: () => void;
 }
 
 export interface ObserverComplete<T> {
   next?: (value: T) => void;
-  error?: (error: any) => void;
+  error?: (error: unknown) => void;
   complete: () => void;
 }
 

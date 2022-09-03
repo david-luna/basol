@@ -1,15 +1,17 @@
 import { Observer } from './types';
 
+type TeardownFn<T> = (s: Subscriber<T>) => void;
+
 const noop = (): void => {
   return void 0;
 };
 
 export class Subscriber<T> {
-  private readonly teardown: Function;
+  private readonly teardown: TeardownFn<T>;
   private readonly observer: Observer<T>;
   private stopped: boolean;
 
-  constructor(observer: Partial<Observer<T>>, teardown: (s: Subscriber<T>) => void) {
+  constructor(observer: Partial<Observer<T>>, teardown: TeardownFn<T>) {
     this.stopped = false;
     this.teardown = teardown;
     this.observer = {
@@ -26,7 +28,7 @@ export class Subscriber<T> {
     this.observer.next(value);
   }
 
-  error(error: any): void {
+  error(error: unknown): void {
     if (this.stopped) {
       return;
     }

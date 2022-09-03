@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 import { Observer, Subscription } from './types';
 import { Observable } from './observable';
 
@@ -9,7 +10,7 @@ interface ObserverSpy {
 
 describe('Observable', () => {
   let nextTrigger: (num: number) => void;
-  let errorTrigger: (err: any) => void;
+  let errorTrigger: (err: unknown) => void;
   let completeTrigger: () => void;
   let observable: Observable<number>;
   const tearDownSpy = jest.fn();
@@ -26,7 +27,7 @@ describe('Observable', () => {
       nextTrigger = (num: number) => {
         return observer.next(num);
       };
-      errorTrigger = (err: any) => {
+      errorTrigger = (err: unknown) => {
         return observer.error(err);
       };
       completeTrigger = () => {
