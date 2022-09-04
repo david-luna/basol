@@ -16,7 +16,7 @@ jobs:
       - name: Lint & Tests
         run: |
           npm install
-          npm lint
+          npm run lint
           npm test
       - name: Coveralls
         uses: coverallsapp/github-action@master
