@@ -31,9 +31,9 @@
   "author": "David Luna",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/david-luna/yaol/issues"
+    "url": "https://github.com/david-luna/basol/issues"
   },
-  "homepage": "https://github.com/david-luna/yaol#readme",
+  "homepage": "https://github.com/david-luna/basol#readme",
   "devDependencies": {
     "@types/jest": "^27.0.2",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
