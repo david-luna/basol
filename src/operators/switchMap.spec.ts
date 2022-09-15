@@ -9,8 +9,8 @@ describe('switchMap operator', () => {
     jest.useRealTimers();
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-  const flushPromises = () => new Promise((r) => setTimeout(r, 100));
+  const FLUSH_TIMEOUT = 100;
+  const flushPromises = () => new Promise((r) => setTimeout(r, FLUSH_TIMEOUT));
   const sourceNumbers = newObservableWithSpies<number>();
 
   describe('upon emitted value in the source observable', () => {
@@ -41,6 +41,7 @@ describe('switchMap operator', () => {
       expect(spyObserver.complete).not.toHaveBeenCalled();
       expect(sourceNumbers.spies.tearDown).toHaveBeenCalled();
     });
+
     test('should emit the mapped values with an observer projection', () => {
       // eslint-disable-next-line arrow-body-style
       const toObservable = switchMap((x: number) => of(x, x ** 2, x ** 3));
