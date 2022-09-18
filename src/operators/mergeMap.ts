@@ -39,11 +39,9 @@ export function mergeMap<T, P>(project: (value: T, index: number) => Observable<
 
       return () => {
         sourceSubscription.unsubscribe();
-        // eslint-disable-next-line @typescript-eslint/prefer-for-of
-        for (let i = 0; i < innerSubscriptions.length; i++) {
-          const subs = innerSubscriptions[i];
-          subs.unsubscribe();
-        }
+        innerSubscriptions.forEach((subscription) => {
+          subscription.unsubscribe();
+        });
       };
     });
   };

@@ -8,10 +8,7 @@ import { Observable } from '../observable';
  */
 export function of(...inputs: unknown[]): Observable<unknown> {
   return new Observable<unknown>((observer) => {
-    // eslint-disable-next-line @typescript-eslint/prefer-for-of
-    for (let i = 0; i < inputs.length; i++) {
-      observer.next(inputs[i]);
-    }
+    inputs.forEach((input) => observer.next(input));
     observer.complete();
   });
 }

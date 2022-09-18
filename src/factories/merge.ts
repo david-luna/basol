@@ -41,16 +41,14 @@ export function merge(...observables: Observable<unknown>[]): Observable<unknown
       },
     };
 
-    // eslint-disable-next-line @typescript-eslint/prefer-for-of
-    for (let i = 0; i < observables.length; i++) {
-      innerSubscriptions.push(observables[i].subscribe(innerObserver));
-    }
+    observables.forEach((observable) => {
+      innerSubscriptions.push(observable.subscribe(innerObserver));
+    });
 
     return () => {
-      // eslint-disable-next-line @typescript-eslint/prefer-for-of
-      for (let i = 0; i < innerSubscriptions.length; i++) {
-        innerSubscriptions[i].unsubscribe();
-      }
+      innerSubscriptions.forEach((subscription) => {
+        subscription.unsubscribe();
+      });
     };
   });
 }

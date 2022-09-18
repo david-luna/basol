@@ -64,10 +64,7 @@ export function withLatestFrom(...inputs: Observable<any>[]): OperatorFunction<a
       });
 
       return () => {
-        // eslint-disable-next-line @typescript-eslint/prefer-for-of
-        for (let i = 0; i < slots.length; i++) {
-          slots[i].subscription.unsubscribe();
-        }
+        slots.forEach((slot) => slot.subscription.unsubscribe());
         subscription.unsubscribe();
       };
     });
