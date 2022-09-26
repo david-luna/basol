@@ -1,13 +1,18 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { filter } from './filter';
-import { newObservableWithSpies, newSpyObserver } from '../__test__';
+import { newObservableWithSpies, newSpyObserver, ObservableWithSpies } from '../__test__';
+import { Observable } from '../observable';
 
 describe('filter operator', () => {
-  const sourceNumbers = newObservableWithSpies<number>();
-
   // eslint-disable-next-line arrow-body-style
   const toEven = filter((x: number) => x % 2 === 0);
-  const evenNumbers = toEven(sourceNumbers.observable);
+  let sourceNumbers: ObservableWithSpies<number>;
+  let evenNumbers: Observable<number>;
+
+  beforeEach(() => {
+    sourceNumbers = newObservableWithSpies<number>();
+    evenNumbers = toEven(sourceNumbers.observable);
+  });
 
   describe('upon emitted value in the source observable', () => {
     test('should emit the filtered values', () => {

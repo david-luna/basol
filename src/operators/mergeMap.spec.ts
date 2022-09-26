@@ -3,12 +3,13 @@ import { mergeMap } from './mergeMap';
 import { newObservableWithSpies, newSpyObserver, ObservableWithSpies } from '../__test__';
 
 describe('mergeMap operator', () => {
-  const sourceNumbers = newObservableWithSpies<number>();
+  let sourceNumbers: ObservableWithSpies<number>;
   const observablesArray: ObservableWithSpies<number>[] = [];
   const valuesToEmit = Array.from(Array(20)).map(() => Math.random());
   const toMerge = mergeMap((i: number) => observablesArray[i].observable);
 
   beforeEach(() => {
+    sourceNumbers = newObservableWithSpies<number>();
     observablesArray.push(
       newObservableWithSpies<number>(),
       newObservableWithSpies<number>(),
@@ -156,11 +157,10 @@ describe('mergeMap operator', () => {
 
       expect(spyObserver.error).toHaveBeenCalled();
       expect(spyObserver.complete).not.toHaveBeenCalled();
-      // TODO: check this
-      // expect(sourceNumbers.spies.tearDown).toHaveBeenCalled();
-      // observablesArray.forEach((obs) => {
-      //   expect(obs.spies.tearDown).toHaveBeenCalled();
-      // });
+      expect(sourceNumbers.spies.tearDown).toHaveBeenCalled();
+      observablesArray.forEach((obs) => {
+        expect(obs.spies.tearDown).toHaveBeenCalled();
+      });
     });
   });
 });

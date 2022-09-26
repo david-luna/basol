@@ -1,13 +1,18 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { takeWhile } from './takeWhile';
-import { newObservableWithSpies, newSpyObserver } from '../__test__';
+import { newObservableWithSpies, newSpyObserver, ObservableWithSpies } from '../__test__';
+import { Observable } from '../observable';
 
 describe('takeWhile operator', () => {
-  const sourceNumbers = newObservableWithSpies<number>();
-
   // eslint-disable-next-line arrow-body-style
   const lowSquares = takeWhile<number>((value) => Math.pow(value, 2) < 100);
-  const squaresBelowhundred = lowSquares(sourceNumbers.observable);
+  let sourceNumbers: ObservableWithSpies<number>;
+  let squaresBelowhundred: Observable<number>;
+
+  beforeEach(() => {
+    sourceNumbers = newObservableWithSpies<number>();
+    squaresBelowhundred = lowSquares(sourceNumbers.observable);
+  });
 
   describe('upon emitted value in the source observable', () => {
     test('should emit values if they pass the predicate', () => {

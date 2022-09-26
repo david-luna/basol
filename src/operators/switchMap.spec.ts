@@ -2,16 +2,16 @@
 import { switchMap } from './switchMap';
 import { of } from '../factories/of';
 import { Observable } from '../observable';
-import { newObservableWithSpies, newSpyObserver } from '../__test__';
+import { newObservableWithSpies, newSpyObserver, ObservableWithSpies } from '../__test__';
 
 describe('switchMap operator', () => {
-  afterEach(() => {
-    jest.useRealTimers();
-  });
-
   const FLUSH_TIMEOUT = 100;
   const flushPromises = () => new Promise((r) => setTimeout(r, FLUSH_TIMEOUT));
-  const sourceNumbers = newObservableWithSpies<number>();
+  let sourceNumbers: ObservableWithSpies<number>;
+
+  beforeEach(() => {
+    sourceNumbers = newObservableWithSpies<number>();
+  });
 
   describe('upon emitted value in the source observable', () => {
     test('should emit mapped values with a single function', () => {

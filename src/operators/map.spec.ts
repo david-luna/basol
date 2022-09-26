@@ -1,13 +1,18 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 import { map } from './map';
-import { newObservableWithSpies, newSpyObserver } from '../__test__';
+import { newObservableWithSpies, newSpyObserver, ObservableWithSpies } from '../__test__';
+import { Observable } from '../observable';
 
 describe('map operator', () => {
-  const sourceNumbers = newObservableWithSpies<number>();
-
   // eslint-disable-next-line arrow-body-style
   const toSquared = map((x: number) => x * x);
-  const squaredNumbers = toSquared(sourceNumbers.observable);
+  let sourceNumbers: ObservableWithSpies<number>;
+  let squaredNumbers: Observable<number>;
+
+  beforeEach(() => {
+    sourceNumbers = newObservableWithSpies<number>();
+    squaredNumbers = toSquared(sourceNumbers.observable);
+  });
 
   describe('upon emitted value in the source observable', () => {
     test('should emit the mapped values', () => {

@@ -1,13 +1,18 @@
 /* eslint-disable @typescript-eslint/no-magic-numbers */
-import { newObservableWithSpies, newSpyObserver } from '../__test__';
+import { Observable } from '../observable';
+import { newObservableWithSpies, newSpyObserver, ObservableWithSpies } from '../__test__';
 import { take } from './take';
 
 describe('take operator', () => {
-  const sourceNumbers = newObservableWithSpies<number>();
-
   // eslint-disable-next-line arrow-body-style
   const takeTwo = take<number>(2);
-  const firstAndSecond = takeTwo(sourceNumbers.observable);
+  let sourceNumbers: ObservableWithSpies<number>;
+  let firstAndSecond: Observable<number>;
+
+  beforeEach(() => {
+    sourceNumbers = newObservableWithSpies<number>();
+    firstAndSecond = takeTwo(sourceNumbers.observable);
+  });
 
   describe('upon emitted value in the source observable', () => {
     test('should emit as many values as specified', () => {
