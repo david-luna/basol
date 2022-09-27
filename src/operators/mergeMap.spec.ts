@@ -163,4 +163,41 @@ describe('mergeMap operator', () => {
       });
     });
   });
+
+  describe('upon complete in the source observable', () => {
+    test('should continue until all projected observables complete', () => {
+      const resultObservable = toMerge(sourceNumbers.observable);
+      const spyObserver = newSpyObserver();
+      const subscription = resultObservable.subscribe(spyObserver);
+      const completeIndex = Math.max(1, Math.floor(Math.random() * valuesToEmit.length));
+
+      sourceNumbers.triggers.next?.(0);
+      sourceNumbers.triggers.next?.(1);
+      sourceNumbers.triggers.next?.(2);
+
+      // emit values from one of the inner observables randomly
+      valuesToEmit.forEach((value, index) => {
+        const observableIndex = Math.floor(Math.random() * 1000) % 3;
+        const observable = observablesArray[observableIndex];
+
+        if (index === completeIndex) {
+          sourceNumbers.triggers.complete?.();
+        }
+        observable.triggers.next?.(value);
+      });
+
+      // the merged observable should emit values in the same order
+      valuesToEmit.forEach((value, index) => {
+        expect(spyObserver.next).toHaveBeenNthCalledWith(index + 1, value);
+      });
+
+      expect(spyObserver.next).toHaveBeenCalledTimes(valuesToEmit.length);
+      expect(spyObserver.error).not.toHaveBeenCalled();
+      expect(spyObserver.complete).not.toHaveBeenCalled();
+      expect(sourceNumbers.spies.tearDown).not.toHaveBeenCalled();
+      observablesArray.forEach((obs) => {
+        expect(obs.spies.tearDown).not.toHaveBeenCalled();
+      });
+    });
+  });
 });
