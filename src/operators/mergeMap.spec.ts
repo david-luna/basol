@@ -168,8 +168,8 @@ describe('mergeMap operator', () => {
     test('should continue until all projected observables complete', () => {
       const resultObservable = toMerge(sourceNumbers.observable);
       const spyObserver = newSpyObserver();
-      const subscription = resultObservable.subscribe(spyObserver);
       const completeIndex = Math.max(1, Math.floor(Math.random() * valuesToEmit.length));
+      resultObservable.subscribe(spyObserver);
 
       sourceNumbers.triggers.next?.(0);
       sourceNumbers.triggers.next?.(1);
