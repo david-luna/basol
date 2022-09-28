@@ -20,6 +20,10 @@ operators do not use utils and I tried to avoid any internal dependency.
 
 ## Release notes
 
+### [0.3.0]
+
+* Add mergeMap operator
+
 ### [0.2.0]
 
 * Add withLatestFrom operator
