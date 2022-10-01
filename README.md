@@ -20,6 +20,10 @@ operators do not use utils and I tried to avoid any internal dependency.
 
 ## Release notes
 
+### [0.4.0]
+
+* Fix barrel files to expose latesat operators and factories
+
 ### [0.3.0]
 
 * Add mergeMap operator
