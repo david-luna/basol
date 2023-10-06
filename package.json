@@ -9,9 +9,9 @@
     "lib"
   ],
   "scripts": {
-    "build": "npm run build-browser && npm run build-node",
-    "build-browser": "tsc -p tsconfig.browser.json",
-    "build-node": "tsc -p tsconfig.node.json",
+    "build": "npm run build-esm && npm run build-cjs",
+    "build-esm": "tsc -p tsconfig.esm.json",
+    "build-cjs": "tsc -p tsconfig.cjs.json",
     "test": "jest",
     "clean": "rm -rf coverage && rm -rf lib",
     "lcov": "cat coverage/lcov.info | coveralls",
