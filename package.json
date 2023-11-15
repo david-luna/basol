@@ -9,13 +9,10 @@
     "lib"
   ],
   "scripts": {
-    "build": "npm run build-esm && npm run build-cjs",
-    "build-esm": "tsc -p tsconfig.esm.json",
-    "build-cjs": "tsc -p tsconfig.cjs.json",
-    "test": "jest",
+    "test": "tap --exclude=*.ts",
     "clean": "rm -rf coverage && rm -rf lib",
     "lcov": "cat coverage/lcov.info | coveralls",
-    "lint": "eslint 'src/**/*.ts'"
+    "lint": "eslint 'lib/**/*.js'"
   },
   "repository": {
     "type": "git",
@@ -25,7 +22,6 @@
     "observable",
     "utils",
     "library",
-    "typescript",
     "rxjs"
   ],
   "author": "David Luna",
@@ -35,17 +31,12 @@
   },
   "homepage": "https://github.com/david-luna/basol#readme",
   "devDependencies": {
-    "@types/jest": "^27.0.2",
-    "@typescript-eslint/eslint-plugin": "^4.22.0",
-    "@typescript-eslint/parser": "^4.22.0",
     "coveralls": "^3.0.11",
     "eslint": "^7.25.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "jest": "^27.3.1",
     "prettier": "^2.2.1",
-    "ts-jest": "^27.0.7",
-    "ts-loader": "^8.0.11",
+    "tap": "^18.5.8",
     "typescript": "^4.2.4"
   }
 }
