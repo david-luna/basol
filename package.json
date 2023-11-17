@@ -3,11 +3,12 @@
   "version": "0.4.0",
   "type": "module",
   "description": "Basic Observable Library",
-  "main": "./lib/index.js",
   "types": "./lib/types.d.ts",
-  "files": [
-    "lib"
-  ],
+  "exports": {
+    ".": {
+      "import": "./lib/index.js"
+    }
+  },
   "scripts": {
     "test": "tap",
     "clean": "rm -rf .tap",

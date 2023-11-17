@@ -8,5 +8,5 @@ node_modules
 /coverage
 /.tap
 
-# build artifacts
-/lib
+# test artifacts
+/.tap
