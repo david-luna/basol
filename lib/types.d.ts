@@ -112,6 +112,7 @@ export declare function combineLatest<A, B>(a: Observable<A>, b: Observable<B>):
 export declare function combineLatest<A, B, C>(a: Observable<A>, b: Observable<B>, c: Observable<C>): Observable<[A, B, C]>;
 export declare function combineLatest<A, B, C, D>(a: Observable<A>, b: Observable<B>, c: Observable<C>, d: Observable<D>): Observable<[A, B, C, D]>;
 export declare function combineLatest<A, B, C, D, E>(a: Observable<A>, b: Observable<B>, c: Observable<C>, d: Observable<D>, e: Observable<E>): Observable<[A, B, C, D, E]>;
+export declare function combineLatest(...observables: Observable<unknown>[]): Observable<unknown[]>;
 
 
 export declare function concat<A, B>(a: Observable<A>, b: Observable<B>): Observable<A | B>;
@@ -120,6 +121,28 @@ export declare function concat<A, B, C, D>(a: Observable<A>, b: Observable<B>, c
 export declare function concat<A, B, C, D, E>(a: Observable<A>, b: Observable<B>, c: Observable<C>, d: Observable<D>, e: Observable<E>): Observable<A | B | C | D | E>;
 
 export declare function from<T>(input: ObservableInput<T>): Observable<T>;
+
+export interface EventListenerObject<E> {
+  handleEvent(evt: E): void;
+}
+
+export interface HasEventTargetAddRemove<E> {
+  addEventListener(
+    type: string,
+    listener: ((evt: E) => void) | EventListenerObject<E> | null,
+    options?: boolean | AddEventListenerOptions,
+  ): void;
+  removeEventListener(
+    type: string,
+    listener: ((evt: E) => void) | EventListenerObject<E> | null,
+    options?: EventListenerOptions | boolean,
+  ): void;
+}
+
+// TODO: we may add other types in the future
+export type FromEventTarget<T> = HasEventTargetAddRemove<T>;
+
+export function fromEvent<T>(target: FromEventTarget<T>, eventName: string): Observable<T>;
 
 export declare type EventHandlerLike = (...args: unknown[]) => void;
 export declare function fromEventPattern<T>(addHandler: (handler: EventHandlerLike) => unknown, removeHandler: (handler: EventHandlerLike, signal: unknown) => unknown, project?: (...args: any[]) => T): Observable<T>;
