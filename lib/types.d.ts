@@ -159,8 +159,7 @@ export declare function merge<A, B, C, D, E>(a: Observable<A>, b: Observable<B>,
 export declare function of(...inputs: unknown[]): Observable<unknown>;
 
 declare type SequenceFactory<T> = (index: number) => T;
-export declare function sequence(period: number): Observable<number>;
-export declare function sequence<T>(period: number, factory: SequenceFactory<T>): Observable<T>;
+export declare function sequence<T>(period: number, factory?: SequenceFactory<T>): Observable<T>;
 
 export declare function timer(due: number | Date): Observable<void>;
 
