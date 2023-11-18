@@ -1,6 +1,6 @@
 {
   "name": "basol",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "type": "module",
   "description": "Basic Observable Library",
   "types": "./lib/types.d.ts",
@@ -8,6 +8,9 @@
     ".": {
       "import": "./lib/index.js"
     }
+  },
+  "engines": {
+    "node": ">=14.5.0"
   },
   "scripts": {
     "test": "tap",

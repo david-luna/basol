@@ -33,6 +33,8 @@ export declare type OperatorFunction<T, R> = UnaryFunction<Observable<T>, Observ
 export declare type ObservableInput<T> = Observable<T> | PromiseLike<T> | ArrayLike<T>;
 export declare type ObservedValueOf<O> = O extends ObservableInput<infer T> ? T : never;
 
+export type { createObsevable } from './observable';
+
 export declare class Observable<T> {
   constructor(subscribeFn: SubscribeFunction<T>);
 
