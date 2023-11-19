@@ -169,7 +169,7 @@ export declare function filter<T>(check: (value: T) => boolean): OperatorFunctio
 
 export declare function map<T, R>(project: (value: T) => R): OperatorFunction<T, R>;
 
-export declare function mergeMap<T, P>(project: (value: T, index: number) => Observable<P>): OperatorFunction<T, P>;
+export declare function mergeMap<T, R>(project: (value: T, index: number) => Observable<R>): OperatorFunction<T, R>;
 
 export declare function switchMap<T, R extends ObservableInput<any>>(project: (value: T, index: number) => R): OperatorFunction<T, ObservedValueOf<R>>;
 
