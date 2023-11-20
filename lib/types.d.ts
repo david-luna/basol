@@ -1,4 +1,3 @@
-export declare type TeardownFunction = () => void;
 export interface Observer<T> {
   next: (value: T) => void;
   error: (error: unknown) => void;
@@ -21,7 +20,7 @@ export interface ObserverComplete<T> {
 }
 export declare type PartialObserver<T> = ObserverNext<T> | ObserverError<T> | ObserverComplete<T>;
 export interface SubscribeFunction<T> {
-  (observer: Observer<T>): TeardownFunction | void;
+  (observer: Observer<T>): () => void | void;
 }
 export interface Subscription {
   unsubscribe(): void;
