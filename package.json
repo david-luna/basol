@@ -13,7 +13,7 @@
     "node": ">=14.5.0"
   },
   "scripts": {
-    "test": "tap",
+    "test": "node --test",
     "clean": "rm -rf .tap",
     "lcov": "cat coverage/lcov.info | coveralls",
     "lint": "eslint 'lib/**/*.js'"
@@ -35,12 +35,12 @@
   },
   "homepage": "https://github.com/david-luna/basol#readme",
   "devDependencies": {
+    "@types/node": "^20.10.0",
     "coveralls": "^3.0.11",
     "eslint": "^8.53.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
     "prettier": "^2.2.1",
-    "tap": "^18.5.8",
     "typescript": "^4.4.4"
   }
 }

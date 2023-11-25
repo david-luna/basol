@@ -1,3 +1,8 @@
+// Generic extending in JSDoc
+// https://stackoverflow.com/questions/65689718/how-to-pass-a-generic-type-argument-with-jsdoc
+// https://www.typescriptlang.org/play?ts=4.4.4&filetype=js#code/PQKhCgAIUgBAXApgWwA4BsCGTIG8CuAdgNaED2A7oQL6QAqUMsqmATpsngM7ysCWhAOa0AVlzKEAyr0ZxWiePlaE8dao2DgAZkQDG8PhMgATRLrKmAUuMIAKMROmsAlHiiQP8xcsiXJAeQA5ADoWVi5EexsnZ3B1cHNCHkg2dgBPSABeSFAmeDTURDx8wrItEzMLRGsJAB5CfGQAI0RWAG0AXQA+WhBgSFtTcysbZ1sAIjaARgAaSAAmOYBmDvHnIA
+
+
 export interface Observer<T> {
   next: (value: T) => void;
   error: (error: unknown) => void;
@@ -121,7 +126,7 @@ export declare function concat<A, B, C>(a: Observable<A>, b: Observable<B>, c: O
 export declare function concat<A, B, C, D>(a: Observable<A>, b: Observable<B>, c: Observable<C>, d: Observable<D>): Observable<A | B | C | D>;
 export declare function concat<A, B, C, D, E>(a: Observable<A>, b: Observable<B>, c: Observable<C>, d: Observable<D>, e: Observable<E>): Observable<A | B | C | D | E>;
 
-export declare function from<T>(input: ObservableInput<T>): Observable<T>;
+export type { from } from './factories/from';
 
 export interface EventListenerObject<E> {
   handleEvent(evt: E): void;
@@ -148,7 +153,7 @@ export function fromEvent<T>(target: FromEventTarget<T>, eventName: string): Obs
 export declare type EventHandlerLike = (...args: unknown[]) => void;
 export declare function fromEventPattern<T>(addHandler: (handler: EventHandlerLike) => unknown, removeHandler: (handler: EventHandlerLike, signal: unknown) => unknown, project?: (...args: any[]) => T): Observable<T>;
 
-export declare function interval(period: number): Observable<number>;
+export type { interval } from './factories/interval';
 
 export declare function merge<A, B>(a: Observable<A>, b: Observable<B>): Observable<A | B>;
 export declare function merge<A, B, C>(a: Observable<A>, b: Observable<B>, c: Observable<C>): Observable<A | B | C>;
@@ -157,24 +162,24 @@ export declare function merge<A, B, C, D, E>(a: Observable<A>, b: Observable<B>,
 
 export declare function of(...inputs: unknown[]): Observable<unknown>;
 
-declare type SequenceFactory<T> = (index: number) => T;
-export declare function sequence<T>(period: number, factory?: SequenceFactory<T>): Observable<T>;
+export type { sequence } from './factories/sequence';
 
-export declare function timer(due: number | Date): Observable<void>;
+export type { timer } from './factories/timer';
 
 // operators
 
-export declare function filter<T>(check: (value: T) => boolean): OperatorFunction<T, T>;
+export type { filter } from './operators/filter';
 
-export declare function map<T, R>(project: (value: T) => R): OperatorFunction<T, R>;
+export type { map } from './operators/map';
 
-export declare function mergeMap<T, R>(project: (value: T, index: number) => Observable<R>): OperatorFunction<T, R>;
+export type { mergeMap } from './operators/mergeMap';
 
+// TODO: check to move this one
 export declare function switchMap<T, R extends ObservableInput<any>>(project: (value: T, index: number) => R): OperatorFunction<T, ObservedValueOf<R>>;
 
-export declare function take<T>(count: number): OperatorFunction<T, T>;
+export type { take } from './operators/take';
 
-export declare function takeWhile<T>(predicate: (value: T, index: number) => boolean, inclusive?: boolean): OperatorFunction<T, T>;
+export type { takeWhile } from './operators/takeWhile';
 
 export declare function withLatestFrom<T, A, B>(a: Observable<A>, b: Observable<B>): OperatorFunction<T, [T, A, B]>;
 export declare function withLatestFrom<T, A, B, C>(a: Observable<A>, b: Observable<B>, c: Observable<C>): OperatorFunction<T, [T, A, B, C]>;

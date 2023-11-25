@@ -9,5 +9,5 @@
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true
   },
-  "include": ["./lib"]
+  "include": ["./lib", "test/operators/filter.test.js"]
 }
