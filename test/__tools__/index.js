@@ -8,6 +8,10 @@ import { createObsevable } from '../../lib/observable.js';
  */
 
 /**
+ * @typedef {import('node:test').Mock<AnyFunction>['mock']} MockFunction
+ */
+
+/**
  * @template T
  * @typedef {Object} ObservableMock
  * @property {import('../../lib/types').Observable<T>} observable
@@ -28,18 +32,16 @@ import { createObsevable } from '../../lib/observable.js';
  */
 export function createMockObservable() {
   /** @type {any} */
-  const wrapper = {
-    triggers: {},
-    mocks: { tearDown: mock.fn(() => void 0) },
-  };
+  const wrapper = { triggers: {}, mocks: {} };
 
   wrapper.observable = createObsevable((observer) => {
     wrapper.triggers.next = (val) => observer.next(val);
     wrapper.triggers.error = (err) => observer.error(err);
     wrapper.triggers.complete = () => observer.complete();
 
-    return void 0; // TODO: remove this
+    return wrapper.mocks.tearDown;
   });
+  wrapper.mocks.tearDown = mock.fn();
 
   return wrapper;
 }
