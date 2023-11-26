@@ -20,7 +20,13 @@ let observerMock;
 /** @type {import('../../lib/types').Subscription} */
 let subscription;
 /** @type {MockFunction} */
-let nextMock, errorMock, completeMock, tearDownMock;
+let nextMock
+/** @type {MockFunction} */
+let errorMock;
+/** @type {MockFunction} */
+let completeMock;
+/** @type {MockFunction} */
+let tearDownMock;
 
 beforeEach(() => {
   sourceNumbers = createMockObservable();
