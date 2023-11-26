@@ -16,7 +16,11 @@
     "test": "node --test",
     "clean": "rm -rf .tap",
     "lcov": "cat coverage/lcov.info | coveralls",
-    "lint": "eslint 'lib/**/*.js'"
+    "lint": "npm run lint:js && npm run lint:ts",
+    "lint:js": "eslint 'lib/**/*.js'",
+    "lint:ts": "tsc"
+    
+
   },
   "repository": {
     "type": "git",

@@ -19,7 +19,7 @@ beforeEach(() => {
   evenNumbers = toEven(sourceNumbers.observable);
 });
 
-test('should emit the filtered values', () => {
+test('filter - should emit the filtered values', () => {
   const observerMock = createMockObserver();
   const subscription = evenNumbers.subscribe(observerMock);
 
@@ -36,6 +36,51 @@ test('should emit the filtered values', () => {
   // error & complete not called
   assert.strictEqual(observerMock.error.mock.callCount(), 0);
   assert.strictEqual(observerMock.complete.mock.callCount(), 0);
+
+  // tear down function called
+  assert.strictEqual(sourceNumbers.mocks.tearDown.mock.callCount(), 0);
+});
+
+test('filter - should error in the filtered observables', () => {
+  const observerMock = createMockObserver();
+  const subscription = evenNumbers.subscribe(observerMock);
+
+  sourceNumbers.triggers.next(2);
+  sourceNumbers.triggers.error(new Error('observer error'));
+  subscription.unsubscribe();
+
+  const callsToNext = observerMock.next.mock.calls;
+  assert.strictEqual(observerMock.next.mock.callCount(), 1);
+  assert.deepStrictEqual(callsToNext[0].arguments, [2]);
+
+  const callsToError = observerMock.error.mock.calls;
+  assert.strictEqual(observerMock.error.mock.callCount(), 1);
+  assert.strictEqual(callsToError[0].arguments[0].message, 'observer error');
+
+  // complete not called
+  assert.strictEqual(observerMock.complete.mock.callCount(), 0);
+
+  // tear down function called
+  assert.strictEqual(sourceNumbers.mocks.tearDown.mock.callCount(), 0);
+});
+
+test('filter - should complete in the filtered observables', () => {
+  const observerMock = createMockObserver();
+  const subscription = evenNumbers.subscribe(observerMock);
+
+  sourceNumbers.triggers.next(2);
+  sourceNumbers.triggers.complete();
+  subscription.unsubscribe();
+
+  const callsToNext = observerMock.next.mock.calls;
+  assert.strictEqual(observerMock.next.mock.callCount(), 1);
+  assert.deepStrictEqual(callsToNext[0].arguments, [2]);
+
+  // error not called
+  assert.strictEqual(observerMock.error.mock.callCount(), 0);
+
+  // complete called
+  assert.strictEqual(observerMock.complete.mock.callCount(), 1);
 
   // tear down function called
   assert.strictEqual(sourceNumbers.mocks.tearDown.mock.callCount(), 0);
