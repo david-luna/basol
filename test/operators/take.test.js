@@ -7,7 +7,6 @@ import { take } from '../../lib/operators/take.js';
 
 /** @typedef {import('../__tools__/index.js').MockFunction} MockFunction */
 
-/** @type {(x:number) => boolean} */
 const takeTwo = take(2);
 
 /** @type {import('../__tools__/index.js').ObservableMock<number>} */
