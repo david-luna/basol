@@ -25,7 +25,7 @@ let observerMock;
 /** @type {import('../../lib/types.js').Subscription} */
 let subscription;
 /** @type {MockFunction} */
-let nextMock
+let nextMock;
 /** @type {MockFunction} */
 let errorMock;
 /** @type {MockFunction} */
