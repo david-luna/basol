@@ -34,6 +34,7 @@ export function createMockObservable() {
   /** @type {any} */
   const wrapper = { triggers: {}, mocks: {} };
 
+  wrapper.mocks.tearDown = mock.fn();
   wrapper.observable = createObsevable((observer) => {
     wrapper.triggers.next = (val) => observer.next(val);
     wrapper.triggers.error = (err) => observer.error(err);
@@ -41,7 +42,6 @@ export function createMockObservable() {
 
     return wrapper.mocks.tearDown;
   });
-  wrapper.mocks.tearDown = mock.fn();
 
   return wrapper;
 }
