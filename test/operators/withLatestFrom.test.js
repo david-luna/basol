@@ -186,7 +186,7 @@ test('withLatestFrom - should not emit after main observable completes', () => {
   assert.strictEqual(tearDownMock.callCount(), 1);
 });
 
-test('withLatestFrom - should teardown all inne subscriptions', () => {
+test('withLatestFrom - should teardown all inner subscriptions', () => {
   sourceNumbers.triggers.next(1);
   sourceStrings.triggers.next('one');
   sourceBooleans.triggers.next(true);
