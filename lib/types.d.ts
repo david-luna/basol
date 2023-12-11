@@ -1,8 +1,3 @@
-// Generic extending in JSDoc
-// https://stackoverflow.com/questions/65689718/how-to-pass-a-generic-type-argument-with-jsdoc
-// https://www.typescriptlang.org/play?ts=4.4.4&filetype=js#code/PQKhCgAIUgBAXApgWwA4BsCGTIG8CuAdgNaED2A7oQL6QAqUMsqmATpsngM7ysCWhAOa0AVlzKEAyr0ZxWiePlaE8dao2DgAZkQDG8PhMgATRLrKmAUuMIAKMROmsAlHiiQP8xcsiXJAeQA5ADoWVi5EexsnZ3B1cHNCHkg2dgBPSABeSFAmeDTURDx8wrItEzMLRGsJAB5CfGQAI0RWAG0AXQA+WhBgSFtTcysbZ1sAIjaARgAaSAAmOYBmDvHnIA
-
-
 export interface Observer<T> {
   next: (value: T) => void;
   error: (error: unknown) => void;
@@ -141,64 +136,68 @@ export interface EventTargetLike<T> {
   ): void;
 }
 
-export interface EventEmitterLikeOne<T> {
+export interface EventEmitterLikeOne<A> {
   addListener(
     type: string,
-    listener: (p1: T) => void,
+    listener: (p1: A) => void,
     options?: any
   ): void;
   removeListener(
     type: string,
-    listener: (p1: T) => void,
+    listener: (p1: A) => void,
     options?: any,
   ): void;
 }
-export interface EventEmitterLikeTwo<T,A> {
+export interface EventEmitterLikeTwo<A,B> {
   addListener(
     type: string,
-    listener: (p1: T, p2: A) => void,
+    listener: (p1: A, p2: B) => void,
+    options?: any
+  ): void;
+  addListener(
+    type: string,
+    listener: (p1: A, p2: B) => void,
     options?: any
   ): void;
   removeListener(
     type: string,
-    listener: (p1: T, p2: A) => void,
+    listener: (p1: A, p2: B) => void,
     options?: any,
   ): void;
 }
-export interface EventEmitterLikeThree<T,A,B> {
+export interface EventEmitterLikeThree<A,B,C> {
   addListener(
     type: string,
-    listener: (p1: T, p2: A, p3: B) => void,
+    listener: (p1: A, p2: B, p3: C) => void,
     options?: any
   ): void;
   removeListener(
     type: string,
-    listener: (p1: T, p2: A, p3: B) => void,
+    listener: (p1: A, p2: B, p3: C) => void,
     options?: any,
   ): void;
 }
-export interface EventEmitterLikeFour<T,A,B,C> {
+export interface EventEmitterLikeFour<A,B,C,D> {
   addListener(
     type: string,
-    listener: (p1: T, p2: A, p3: B, p4: C) => void,
+    listener: (p1: A, p2: B, p3: C, p4: D) => void,
     options?: any
   ): void;
   removeListener(
     type: string,
-    listener: (p1: T, p2: A, p3: B, p4: C) => void,
+    listener: (p1: A, p2: B, p3: C, p4: D) => void,
     options?: any,
   ): void;
 }
 
 export declare function fromEvent<T>(target: EventTargetLike<T>, eventName: string): Observable<T>;
-export declare function fromEvent<T>(target: EventEmitterLikeOne<T>, eventName: string): Observable<[T]>;
-export declare function fromEvent<T,A>(target: EventEmitterLikeTwo<T,A>, eventName: string): Observable<[T,A]>;
-export declare function fromEvent<T,A,B>(target: EventEmitterLikeThree<T,A,B>, eventName: string): Observable<[T,A,B]>;
-export declare function fromEvent<T,A,B,C>(target: EventEmitterLikeFour<T,A,B,C>, eventName: string): Observable<[T,A,B,C]>;
+export declare function fromEvent<A>(target: EventEmitterLikeOne<A>, eventName: string): Observable<[A]>;
+export declare function fromEvent<A,B>(target: EventEmitterLikeTwo<A,B>, eventName: string): Observable<[A,B]>;
+export declare function fromEvent<A,B,C>(target: EventEmitterLikeThree<A,B,C>, eventName: string): Observable<[A,B,C]>;
+export declare function fromEvent<A,B,C,D>(target: EventEmitterLikeFour<A,B,C,D>, eventName: string): Observable<[A,B,C,D]>;
 
 
-export declare type EventHandlerLike = (...args: unknown[]) => void;
-export declare function fromEventPattern<T>(addHandler: (handler: EventHandlerLike) => unknown, removeHandler: (handler: EventHandlerLike, signal: unknown) => unknown, project?: (...args: any[]) => T): Observable<T>;
+export type { fromEventPattern } from './factories/fromEventPattern';
 
 export type { interval } from './factories/interval';
 
