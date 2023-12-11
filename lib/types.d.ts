@@ -128,27 +128,74 @@ export declare function concat<A, B, C, D, E>(a: Observable<A>, b: Observable<B>
 
 export type { from } from './factories/from';
 
-export interface EventListenerObject<E> {
-  handleEvent(evt: E): void;
-}
-
-export interface HasEventTargetAddRemove<E> {
+export interface EventTargetLike<T> {
   addEventListener(
     type: string,
-    listener: ((evt: E) => void) | EventListenerObject<E> | null,
-    options?: boolean | AddEventListenerOptions,
+    listener: ((evt: T) => void) | { handleEvent: (e: T) => void } | null,
+    options?: any
   ): void;
   removeEventListener(
     type: string,
-    listener: ((evt: E) => void) | EventListenerObject<E> | null,
-    options?: EventListenerOptions | boolean,
+    listener: ((evt: T) => void) | { handleEvent: (e: T) => void } | null,
+    options?: any,
   ): void;
 }
 
-// TODO: we may add other types in the future
-export type FromEventTarget<T> = HasEventTargetAddRemove<T>;
+export interface EventEmitterLikeOne<T> {
+  addListener(
+    type: string,
+    listener: (p1: T) => void,
+    options?: any
+  ): void;
+  removeListener(
+    type: string,
+    listener: (p1: T) => void,
+    options?: any,
+  ): void;
+}
+export interface EventEmitterLikeTwo<T,A> {
+  addListener(
+    type: string,
+    listener: (p1: T, p2: A) => void,
+    options?: any
+  ): void;
+  removeListener(
+    type: string,
+    listener: (p1: T, p2: A) => void,
+    options?: any,
+  ): void;
+}
+export interface EventEmitterLikeThree<T,A,B> {
+  addListener(
+    type: string,
+    listener: (p1: T, p2: A, p3: B) => void,
+    options?: any
+  ): void;
+  removeListener(
+    type: string,
+    listener: (p1: T, p2: A, p3: B) => void,
+    options?: any,
+  ): void;
+}
+export interface EventEmitterLikeFour<T,A,B,C> {
+  addListener(
+    type: string,
+    listener: (p1: T, p2: A, p3: B, p4: C) => void,
+    options?: any
+  ): void;
+  removeListener(
+    type: string,
+    listener: (p1: T, p2: A, p3: B, p4: C) => void,
+    options?: any,
+  ): void;
+}
 
-export function fromEvent<T>(target: FromEventTarget<T>, eventName: string): Observable<T>;
+export declare function fromEvent<T>(target: EventTargetLike<T>, eventName: string): Observable<T>;
+export declare function fromEvent<T>(target: EventEmitterLikeOne<T>, eventName: string): Observable<[T]>;
+export declare function fromEvent<T,A>(target: EventEmitterLikeTwo<T,A>, eventName: string): Observable<[T,A]>;
+export declare function fromEvent<T,A,B>(target: EventEmitterLikeThree<T,A,B>, eventName: string): Observable<[T,A,B]>;
+export declare function fromEvent<T,A,B,C>(target: EventEmitterLikeFour<T,A,B,C>, eventName: string): Observable<[T,A,B,C]>;
+
 
 export declare type EventHandlerLike = (...args: unknown[]) => void;
 export declare function fromEventPattern<T>(addHandler: (handler: EventHandlerLike) => unknown, removeHandler: (handler: EventHandlerLike, signal: unknown) => unknown, project?: (...args: any[]) => T): Observable<T>;
