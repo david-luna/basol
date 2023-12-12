@@ -123,79 +123,39 @@ export declare function concat<A, B, C, D, E>(a: Observable<A>, b: Observable<B>
 
 export type { from } from './factories/from';
 
-export interface EventTargetLike<T> {
+
+// NOTE: to mimic browser's CustomEvent
+type NodeOrBrowserEvent = Event | Event & { detail: any };
+export interface EventTargetLike<T extends NodeOrBrowserEvent> {
   addEventListener(
     type: string,
-    listener: ((evt: T) => void) | { handleEvent: (e: T) => void } | null,
+    listener: ((e: T) => void) | { handleEvent: (e: T) => void } | null,
     options?: any
   ): void;
   removeEventListener(
     type: string,
-    listener: ((evt: T) => void) | { handleEvent: (e: T) => void } | null,
+    listener: ((e: T) => void) | { handleEvent: (e: T) => void } | null,
+    options?: any,
+  ): void;
+}
+type EventParam<T> = T extends EventTargetLike<infer E> ? E : never;
+
+export interface EventEmitterLike<T extends (...args: any[]) => void> {
+  addListener(
+    type: string,
+    listener: T,
+    options?: any
+  ): void;
+  removeListener(
+    type: string,
+    listener: T,
     options?: any,
   ): void;
 }
 
-export interface EventEmitterLikeOne<A> {
-  addListener(
-    type: string,
-    listener: (p1: A) => void,
-    options?: any
-  ): void;
-  removeListener(
-    type: string,
-    listener: (p1: A) => void,
-    options?: any,
-  ): void;
-}
-export interface EventEmitterLikeTwo<A,B> {
-  addListener(
-    type: string,
-    listener: (p1: A, p2: B) => void,
-    options?: any
-  ): void;
-  addListener(
-    type: string,
-    listener: (p1: A, p2: B) => void,
-    options?: any
-  ): void;
-  removeListener(
-    type: string,
-    listener: (p1: A, p2: B) => void,
-    options?: any,
-  ): void;
-}
-export interface EventEmitterLikeThree<A,B,C> {
-  addListener(
-    type: string,
-    listener: (p1: A, p2: B, p3: C) => void,
-    options?: any
-  ): void;
-  removeListener(
-    type: string,
-    listener: (p1: A, p2: B, p3: C) => void,
-    options?: any,
-  ): void;
-}
-export interface EventEmitterLikeFour<A,B,C,D> {
-  addListener(
-    type: string,
-    listener: (p1: A, p2: B, p3: C, p4: D) => void,
-    options?: any
-  ): void;
-  removeListener(
-    type: string,
-    listener: (p1: A, p2: B, p3: C, p4: D) => void,
-    options?: any,
-  ): void;
-}
+type EventOrParams<T> = T extends EventEmitterLike<infer F> ? Parameters<F> : EventParam<T>;
 
-export declare function fromEvent<T>(target: EventTargetLike<T>, eventName: string): Observable<T>;
-export declare function fromEvent<A>(target: EventEmitterLikeOne<A>, eventName: string): Observable<[A]>;
-export declare function fromEvent<A,B>(target: EventEmitterLikeTwo<A,B>, eventName: string): Observable<[A,B]>;
-export declare function fromEvent<A,B,C>(target: EventEmitterLikeThree<A,B,C>, eventName: string): Observable<[A,B,C]>;
-export declare function fromEvent<A,B,C,D>(target: EventEmitterLikeFour<A,B,C,D>, eventName: string): Observable<[A,B,C,D]>;
-
+export declare function fromEvent<T>(target: T, eventName: string): Observable<EventOrParams<T>>;
 
 export type { fromEventPattern } from './factories/fromEventPattern';
 
