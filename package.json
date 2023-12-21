@@ -14,13 +14,12 @@
   },
   "scripts": {
     "test": "node --test",
-    "clean": "rm -rf .tap",
-    "lcov": "cat coverage/lcov.info | coveralls",
+    "test:lcov": "node --test --experimental-test-coverage --test-reporter=lcov",
+    "test:junit": "node --test --experimental-test-coverage --test-reporter=junit",
+    "lcov": "cat lcov.info | coveralls",
     "lint": "npm run lint:js && npm run lint:ts",
     "lint:js": "eslint 'lib/**/*.js'",
     "lint:ts": "tsc"
-    
-
   },
   "repository": {
     "type": "git",
