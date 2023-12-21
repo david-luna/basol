@@ -8,6 +8,7 @@ import { takeWhile } from '../../lib/operators/takeWhile.js';
 /** @typedef {import('../__tools__/index.js').MockFunction} MockFunction */
 
 const lowSquares = takeWhile((value) => Math.pow(value, 2) < 100);
+const lowSquaresIncluding = takeWhile((value) => Math.pow(value, 2) < 100, true);
 
 /** @type {import('../__tools__/index.js').ObservableMock<number>} */
 let sourceNumbers;
@@ -71,7 +72,7 @@ test('takeWhile - should emit values until the predicate fails', () => {
 
 test('takeWhile - should emit values including the one failing the predicate', () => {
   const values = [...new Array(20)].map((v, i) => i + 1);
-  squaresBelowhundred = takeWhile((v) => v < 100, true);
+  squaresBelowhundred = lowSquaresIncluding(sourceNumbers.observable);
 
   values.forEach(sourceNumbers.triggers.next);
   subscription.unsubscribe();

@@ -8,6 +8,7 @@ import { createObsevable } from '../../lib/observable.js';
 
 test('from - should not accept bad input values', () => {
   try {
+    // @ts-expect-error
     from({});
     assert.ifError('this hsould never happen');
   } catch (err) {
@@ -41,6 +42,7 @@ test('from - should accept a resolved promise as input', (t, done) => {
 test('from - should accept a rejected promise as input', (t, done) => {
   from(Promise.reject(new Error('promise rejected'))).subscribe({
     error: (err) => {
+      // @ts-expect-error
       assert.strictEqual(err.message, 'promise rejected');
       done();
     },
@@ -69,6 +71,7 @@ test('from - should accept a promise which rejects after a time', (t, done) => {
 
   from(promise).subscribe({
     error: (err) => {
+      // @ts-expect-error
       assert.strictEqual(err.message, 'promise rejected');
       done();
     },
@@ -79,6 +82,9 @@ test('from - should accept an observable as input', (t, done) => {
   const observableInput = createObsevable((observer) => {
     observer.next(true);
     observer.complete();
+
+    // TODO: remove this and check what's happening with the types
+    return () => void 0;
   });
 
   const fromObservable = from(observableInput);

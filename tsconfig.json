@@ -10,5 +10,6 @@
     "allowSyntheticDefaultImports": true,
     "lib": ["ES2020"]
   },
-  "include": ["./lib", "test/operators/filter.test.js"]
+  "include": ["./lib", "./test"],
+  "exclude": ["node_modules"]
 }

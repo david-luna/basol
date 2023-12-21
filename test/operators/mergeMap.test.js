@@ -18,7 +18,7 @@ const toMerged = mergeMap(getMock);
 
 /** @type {ObservableMockNum} */
 let sourceNumbers;
-/** @type {ObservableMockNum} */
+/** @type {import('../../lib/types').Observable<number>} */
 let mergedNumbers;
 /** @type {import('../__tools__/index.js').ObserverMock<number>} */
 let observerMock;
