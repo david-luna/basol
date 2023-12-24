@@ -9,8 +9,8 @@ import { of } from '../../lib/factories/of.js';
 /** @typedef {import('../__tools__/index.js').MockFunction} MockFunction */
 /** @typedef {import('../__tools__/index.js').ObservableMock<number>} ObservableMockNum */
 
-const FLUSH_TIMEOUT = 100;
-const flushPromises = () => new Promise((r) => setTimeout(r, FLUSH_TIMEOUT));
+const FLUSH_TIMEOUT = 1;
+const flushPromises = (timeout = FLUSH_TIMEOUT) => new Promise((r) => setTimeout(r, timeout));
 
 /** @type {ObservableMockNum} */
 let sourceNumbers;
@@ -127,6 +127,7 @@ test('switchMap - should cancel the async value if source emits before', async (
   sourceNumbers.triggers.next(2);
   sourceNumbers.triggers.next(3);
   sourceNumbers.triggers.next(4);
+  await flushPromises();
   subscription.unsubscribe();
 
   // the merged observable should emit values in the same order
