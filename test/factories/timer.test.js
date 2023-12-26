@@ -10,7 +10,7 @@ test('timer - should create an observable emiting after the given time', async (
   const observable = timer(50);
   const subscription = observable.subscribe(observerMock);
 
-  // TODO: use times when v20.4.0 gets into maintenance
+  // TODO: use timers when v20.4.0 gets into maintenance
   // https://nodejs.org/en/about/previous-releases
   // https://nodejs.org/api/test.html#class-mocktimers
   await new Promise((r) => setTimeout(r, 100));
@@ -27,7 +27,7 @@ test('timer - should create an observable emiting after the given Date', async (
   const observable = timer(emitAt);
   const subscription = observable.subscribe(observerMock);
 
-  // TODO: use times when v20.4.0 gets into maintenance
+  // TODO: use timers when v20.4.0 gets into maintenance
   // https://nodejs.org/en/about/previous-releases
   // https://nodejs.org/api/test.html#class-mocktimers
   await new Promise((r) => setTimeout(r, 100));
@@ -50,7 +50,7 @@ test('timer - should emit at next macrotask directly if time/date is negative', 
   const observable = timer(emitAt);
   const subscription = observable.subscribe(observerMock);
 
-  // TODO: use times when v20.4.0 gets into maintenance
+  // TODO: use timers when v20.4.0 gets into maintenance
   // https://nodejs.org/en/about/previous-releases
   // https://nodejs.org/api/test.html#class-mocktimers
   await new Promise((r) => setTimeout(r, 0));

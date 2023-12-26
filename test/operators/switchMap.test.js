@@ -1,10 +1,11 @@
 import assert from 'node:assert';
-import { beforeEach, test } from 'node:test';
+import { beforeEach, mock, test } from 'node:test';
 
 import { createMockObservable, createMockObserver } from '../__tools__/index.js';
 
 import { switchMap } from '../../lib/operators/switchMap.js';
 import { of } from '../../lib/factories/of.js';
+import { createObsevable } from '../../lib/observable.js';
 
 /** @typedef {import('../__tools__/index.js').MockFunction} MockFunction */
 /** @typedef {import('../__tools__/index.js').ObservableMock<number>} ObservableMockNum */
@@ -135,5 +136,56 @@ test('switchMap - should cancel the async value if source emits before', async (
   assert.deepStrictEqual(nextMock.calls[0].arguments, [16]);
   assert.strictEqual(errorMock.callCount(), 0);
   assert.strictEqual(completeMock.callCount(), 0);
+  assert.strictEqual(tearDownMock.callCount(), 1);
+});
+
+test('switchMap - should unsubscribe inner observable and create a new one when source emits', async () => {
+  const setIntervalMock = mock.fn((cb, t) => setInterval(cb, t));
+  const clarIntervalMock = mock.fn((id) => clearInterval(id));
+
+  const toInterval = switchMap((/** @type {number} */ x) =>
+    createObsevable((obs) => {
+      const signal = setIntervalMock(() => obs.next(x * 1000), 100);
+
+      return () => clarIntervalMock(signal);
+    }),
+  );
+
+  const intervalObservable = toInterval(sourceNumbers.observable);
+  subscription = intervalObservable.subscribe(observerMock);
+
+  sourceNumbers.triggers.next(2);
+  // TODO: use timers when v20.4.0 gets into maintenance
+  // https://nodejs.org/en/about/previous-releases
+  // https://nodejs.org/api/test.html#class-mocktimers
+  await new Promise((r) => setTimeout(r, 210));
+  assert.strictEqual(setIntervalMock.mock.callCount(), 1);
+  assert.strictEqual(clarIntervalMock.mock.callCount(), 0);
+  assert.strictEqual(nextMock.callCount(), 2);
+  assert.deepStrictEqual(nextMock.calls[0].arguments, [2000]);
+  assert.deepStrictEqual(nextMock.calls[1].arguments, [2000]);
+
+  sourceNumbers.triggers.next(3);
+  // TODO: same here for timers
+  await new Promise((r) => setTimeout(r, 210));
+  assert.strictEqual(setIntervalMock.mock.callCount(), 2);
+  assert.strictEqual(clarIntervalMock.mock.callCount(), 1);
+  assert.strictEqual(nextMock.callCount(), 4);
+  assert.deepStrictEqual(nextMock.calls[2].arguments, [3000]);
+  assert.deepStrictEqual(nextMock.calls[3].arguments, [3000]);
+
+  sourceNumbers.triggers.next(4);
+  // TODO: same here for timers
+  await new Promise((r) => setTimeout(r, 210));
+  assert.strictEqual(setIntervalMock.mock.callCount(), 3);
+  assert.strictEqual(clarIntervalMock.mock.callCount(), 2);
+  assert.strictEqual(nextMock.callCount(), 6);
+  assert.deepStrictEqual(nextMock.calls[4].arguments, [4000]);
+  assert.deepStrictEqual(nextMock.calls[5].arguments, [4000]);
+
+  subscription.unsubscribe();
+  assert.strictEqual(errorMock.callCount(), 0);
+  assert.strictEqual(completeMock.callCount(), 0);
+  assert.strictEqual(clarIntervalMock.mock.callCount(), 3);
   assert.strictEqual(tearDownMock.callCount(), 1);
 });
