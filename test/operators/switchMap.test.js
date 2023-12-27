@@ -189,3 +189,36 @@ test('switchMap - should unsubscribe inner observable and create a new one when 
   assert.strictEqual(clarIntervalMock.mock.callCount(), 3);
   assert.strictEqual(tearDownMock.callCount(), 1);
 });
+
+test('switchMap - it should error if the source errors', () => {
+  const toIdentity = switchMap((x) => [x]);
+  const identityObserver = toIdentity(sourceNumbers.observable);
+  subscription = identityObserver.subscribe(observerMock);
+
+  sourceNumbers.triggers.next(2);
+  sourceNumbers.triggers.error(new Error('observer error'));
+  subscription.unsubscribe();
+
+  assert.strictEqual(nextMock.callCount(), 1);
+  assert.deepStrictEqual(nextMock.calls[0].arguments, [2]);
+  assert.strictEqual(errorMock.callCount(), 1);
+  assert.deepStrictEqual(errorMock.calls[0].arguments[0].message, 'observer error');
+  assert.strictEqual(completeMock.callCount(), 0);
+  assert.strictEqual(tearDownMock.callCount(), 1);
+});
+
+test('switchMap - it should complete if the source completes', () => {
+  const toIdentity = switchMap((x) => [x]);
+  const identityObserver = toIdentity(sourceNumbers.observable);
+  subscription = identityObserver.subscribe(observerMock);
+
+  sourceNumbers.triggers.next(2);
+  sourceNumbers.triggers.complete();
+  subscription.unsubscribe();
+
+  assert.strictEqual(nextMock.callCount(), 1);
+  assert.deepStrictEqual(nextMock.calls[0].arguments, [2]);
+  assert.strictEqual(errorMock.callCount(), 0);
+  assert.strictEqual(completeMock.callCount(), 1);
+  assert.strictEqual(tearDownMock.callCount(), 1);
+});
