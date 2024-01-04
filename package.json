@@ -1,21 +1,26 @@
 {
   "name": "basol",
-  "version": "0.4.0",
+  "version": "0.5.0",
+  "type": "module",
   "description": "Basic Observable Library",
-  "main": "./lib/cjs/index.js",
-  "module": "./lib/esm/index.js",
-  "types": "./lib/index.d.ts",
-  "files": [
-    "lib"
-  ],
+  "types": "./lib/types.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js"
+    }
+  },
+  "engines": {
+    "node": ">=14.5.0"
+  },
   "scripts": {
-    "build": "npm run build-esm && npm run build-cjs",
-    "build-esm": "tsc -p tsconfig.esm.json",
-    "build-cjs": "tsc -p tsconfig.cjs.json",
-    "test": "jest",
-    "clean": "rm -rf coverage && rm -rf lib",
-    "lcov": "cat coverage/lcov.info | coveralls",
-    "lint": "eslint 'src/**/*.ts'"
+    "test": "node --test",
+    "test:lcov": "node --test --experimental-test-coverage --test-reporter=lcov --test-reporter-destination=test-report-lcov.info",
+    "test:junit": "node --test --experimental-test-coverage --test-reporter=junit --test-reporter-destination=test-report-junit.xml",
+    "test:ci": "node --test --experimental-test-coverage --test-reporter=./test/lcov-reporter.js --test-reporter-destination=test-report-lcov.info",
+    "lcov": "cat test-report-lcov.info | coveralls",
+    "lint": "npm run lint:js && npm run lint:ts",
+    "lint:js": "eslint 'lib/**/*.js'",
+    "lint:ts": "tsc"
   },
   "repository": {
     "type": "git",
@@ -25,7 +30,6 @@
     "observable",
     "utils",
     "library",
-    "typescript",
     "rxjs"
   ],
   "author": "David Luna",
@@ -35,17 +39,12 @@
   },
   "homepage": "https://github.com/david-luna/basol#readme",
   "devDependencies": {
-    "@types/jest": "^27.0.2",
-    "@typescript-eslint/eslint-plugin": "^4.22.0",
-    "@typescript-eslint/parser": "^4.22.0",
+    "@types/node": "^20.10.0",
     "coveralls": "^3.0.11",
-    "eslint": "^7.25.0",
+    "eslint": "^8.53.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "jest": "^27.3.1",
     "prettier": "^2.2.1",
-    "ts-jest": "^27.0.7",
-    "ts-loader": "^8.0.11",
-    "typescript": "^4.2.4"
+    "typescript": "^4.4.4"
   }
 }
