@@ -16,8 +16,8 @@
     "test": "node --test",
     "test:lcov": "node --test --experimental-test-coverage --test-reporter=lcov --test-reporter-destination=test-report-lcov.info",
     "test:junit": "node --test --experimental-test-coverage --test-reporter=junit --test-reporter-destination=test-report-junit.xml",
-    "test:cov": "node --test --experimental-test-coverage --test-reporter=./test/lcov-reporter.js --test-reporter-destination=test-report-lcov.info",
-    "lcov": "cat coverage/lcov.info | coveralls",
+    "test:ci": "node --test --experimental-test-coverage --test-reporter=./test/lcov-reporter.js --test-reporter-destination=test-report-lcov.info",
+    "lcov": "cat test-report-lcov.info | coveralls",
     "lint": "npm run lint:js && npm run lint:ts",
     "lint:js": "eslint 'lib/**/*.js'",
     "lint:ts": "tsc"
