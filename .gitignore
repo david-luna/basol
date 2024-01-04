@@ -5,8 +5,4 @@
 node_modules
 
 # test artifacts
-/coverage
-/.tap
-
-# test artifacts
-/.tap
+test-report-*
