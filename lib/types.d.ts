@@ -18,7 +18,7 @@ export interface ObserverComplete<T> {
   error?: (error: unknown) => void;
   complete: () => void;
 }
-export declare type PartialObserver<T> = ObserverNext<T> | ObserverError<T> | ObserverComplete<T>;
+export type PartialObserver<T> = ObserverNext<T> | ObserverError<T> | ObserverComplete<T>;
 export interface SubscribeFunction<T> {
   (observer: Observer<T>): void | (() => void);
 }
@@ -28,9 +28,9 @@ export interface Subscription {
 export interface UnaryFunction<T, R> {
     (source: T): R;
 }
-export declare type OperatorFunction<T, R> = UnaryFunction<Observable<T>, Observable<R>>;
-export declare type ObservableInput<T> = Observable<T> | PromiseLike<T> | ArrayLike<T>;
-export declare type ObservedValueOf<O> = O extends ObservableInput<infer T> ? T : never;
+export type OperatorFunction<T, R> = UnaryFunction<Observable<T>, Observable<R>>;
+export type ObservableInput<T> = Observable<T> | PromiseLike<T> | ArrayLike<T>;
+export type ObservedValueOf<O> = O extends ObservableInput<infer T> ? T : never;
 
 export { createObsevable } from './observable';
 
@@ -121,7 +121,7 @@ export declare function concat<A, B, C>(a: Observable<A>, b: Observable<B>, c: O
 export declare function concat<A, B, C, D>(a: Observable<A>, b: Observable<B>, c: Observable<C>, d: Observable<D>): Observable<A | B | C | D>;
 export declare function concat<A, B, C, D, E>(a: Observable<A>, b: Observable<B>, c: Observable<C>, d: Observable<D>, e: Observable<E>): Observable<A | B | C | D | E>;
 
-export type { from } from './factories/from';
+export { from } from './factories/from';
 
 
 // NOTE: to mimic browser's CustomEvent
