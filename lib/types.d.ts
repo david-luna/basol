@@ -32,7 +32,7 @@ export declare type OperatorFunction<T, R> = UnaryFunction<Observable<T>, Observ
 export declare type ObservableInput<T> = Observable<T> | PromiseLike<T> | ArrayLike<T>;
 export declare type ObservedValueOf<O> = O extends ObservableInput<infer T> ? T : never;
 
-export type { createObsevable } from './observable';
+export { createObsevable } from './observable';
 
 export declare class Observable<T> {
   constructor(subscribeFn: SubscribeFunction<T>);
@@ -157,9 +157,9 @@ type EventOrParams<T> = T extends EventEmitterLike<infer F> ? Parameters<F> : Ev
 
 export declare function fromEvent<T>(target: T, eventName: string): Observable<EventOrParams<T>>;
 
-export type { fromEventPattern } from './factories/fromEventPattern';
+export { fromEventPattern } from './factories/fromEventPattern';
 
-export type { interval } from './factories/interval';
+export { interval } from './factories/interval';
 
 export declare function merge<A, B>(a: Observable<A>, b: Observable<B>): Observable<A | B>;
 export declare function merge<A, B, C>(a: Observable<A>, b: Observable<B>, c: Observable<C>): Observable<A | B | C>;
@@ -168,24 +168,24 @@ export declare function merge<A, B, C, D, E>(a: Observable<A>, b: Observable<B>,
 
 export declare function of(...inputs: unknown[]): Observable<unknown>;
 
-export type { sequence } from './factories/sequence';
+export { sequence } from './factories/sequence';
 
-export type { timer } from './factories/timer';
+export { timer } from './factories/timer';
 
 // operators
 
-export type { filter } from './operators/filter';
+export { filter } from './operators/filter';
 
-export type { map } from './operators/map';
+export { map } from './operators/map';
 
-export type { mergeMap } from './operators/mergeMap';
+export { mergeMap } from './operators/mergeMap';
 
 // TODO: check to move this one
 export declare function switchMap<T, R extends ObservableInput<any>>(project: (value: T, index: number) => R): OperatorFunction<T, ObservedValueOf<R>>;
 
-export type { take } from './operators/take';
+export { take } from './operators/take';
 
-export type { takeWhile } from './operators/takeWhile';
+export { takeWhile } from './operators/takeWhile';
 
 export declare function withLatestFrom<T, A, B>(a: Observable<A>, b: Observable<B>): OperatorFunction<T, [T, A, B]>;
 export declare function withLatestFrom<T, A, B, C>(a: Observable<A>, b: Observable<B>, c: Observable<C>): OperatorFunction<T, [T, A, B, C]>;
