@@ -20,7 +20,7 @@ export interface ObserverComplete<T> {
 }
 export declare type PartialObserver<T> = ObserverNext<T> | ObserverError<T> | ObserverComplete<T>;
 export interface SubscribeFunction<T> {
-  (observer: Observer<T>): () => void | void;
+  (observer: Observer<T>): void | (() => void);
 }
 export interface Subscription {
   unsubscribe(): void;
