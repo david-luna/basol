@@ -40,7 +40,11 @@ export declare class Observable<T> {
   pipe(): Observable<T>;
   pipe<A>(op1: OperatorFunction<T, A>): Observable<A>;
   pipe<A, B>(op1: OperatorFunction<T, A>, op2: OperatorFunction<A, B>): Observable<B>;
-  pipe<A, B, C>(op1: OperatorFunction<T, A>, op2: OperatorFunction<A, B>, op3: OperatorFunction<B, C>): Observable<C>;
+  pipe<A, B, C>(
+    op1: OperatorFunction<T, A>,
+    op2: OperatorFunction<A, B>,
+    op3: OperatorFunction<B, C>
+  ): Observable<C>;
   pipe<A, B, C, D>(
     op1: OperatorFunction<T, A>,
     op2: OperatorFunction<A, B>,
