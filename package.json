@@ -15,7 +15,7 @@
   "scripts": {
     "test": "node --test",
     "test:lcov": "node --test --experimental-test-coverage --test-reporter=lcov --test-reporter-destination=test-report-lcov.info",
-    "test:junit": "node --test --experimental-test-coverage --test-reporter=junit --test-reporter-destination=test-report-junit.xml",
+    "test:junit": "node --test --test-reporter=junit --test-reporter-destination=test-report-junit.xml",
     "test:ci": "node --test --experimental-test-coverage --test-reporter=./test/lcov-reporter.js --test-reporter-destination=test-report-lcov.info",
     "lcov": "cat test-report-lcov.info | coveralls",
     "lint": "npm run lint:js && npm run lint:ts",
