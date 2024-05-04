@@ -14,7 +14,7 @@ import { createObsevable } from '../../lib/observable.js';
 /**
  * @template T
  * @typedef {Object} ObservableMock
- * @property {import('../../lib/types').Observable<T>} observable
+ * @property {import('../../lib/observable').Observable<T>} observable
  * @property {Object} triggers
  * @property {(val: T) => void} triggers.next
  * @property {(err: any) => void} triggers.error

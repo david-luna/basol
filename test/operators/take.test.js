@@ -11,11 +11,11 @@ const takeTwo = take(2);
 
 /** @type {import('../__tools__/index.js').ObservableMock<number>} */
 let sourceNumbers;
-/** @type {import('../../lib/types.js').Observable<number>} */
+/** @type {import('../../lib/observable').Observable<number>} */
 let firstAndSecond;
 /** @type {import('../__tools__/index.js').ObserverMock<number>} */
 let observerMock;
-/** @type {import('../../lib/types.js').Subscription} */
+/** @type {import('../../lib/observable').Subscription} */
 let subscription;
 /** @type {MockFunction} */
 let nextMock;

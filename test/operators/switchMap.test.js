@@ -17,7 +17,7 @@ const flushPromises = (timeout = FLUSH_TIMEOUT) => new Promise((r) => setTimeout
 let sourceNumbers;
 /** @type {import('../__tools__/index.js').ObserverMock<number>} */
 let observerMock;
-/** @type {import('../../lib/types.js').Subscription} */
+/** @type {import('../../lib/observable').Subscription} */
 let subscription;
 /** @type {MockFunction} */
 let nextMock;
@@ -66,7 +66,7 @@ test('switchMap - should emit mapped values with a single function', () => {
 });
 
 test('switchMap - should emit the mapped values with an observer projection', () => {
-  /** @type {(x:number) => import('../../lib/types').Observable<number>} */
+  /** @type {(x:number) => import('../../lib/observable').Observable<number>} */
   const createObservable = (x) => of(x, x ** 2, x ** 3);
   const toObservable = switchMap(createObservable);
   const observableObservable = toObservable(sourceNumbers.observable);

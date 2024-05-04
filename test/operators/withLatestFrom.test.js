@@ -7,7 +7,7 @@ import { withLatestFrom } from '../../lib/operators/withLatestFrom.js';
 
 /** @typedef {import('../__tools__/index.js').MockFunction} MockFunction */
 
-/** @type {import('../../lib/types.js').OperatorFunction<any, any>} */
+/** @type {import('../../lib/observable').OperatorFunction<any, any>} */
 let latestValues;
 /** @type {import('../__tools__/index.js').ObservableMock<{ val: number }>} */
 let sourceRecords;
@@ -17,12 +17,12 @@ let sourceNumbers;
 let sourceStrings;
 /** @type {import('../__tools__/index.js').ObservableMock<boolean>} */
 let sourceBooleans;
-/** @type {import('../../lib/types.js').Observable<[{val: number}, number, string, boolean]>} */
+/** @type {import('../../lib/observable').Observable<[{val: number}, number, string, boolean]>} */
 let lastFromSources;
 
 /** @type {import('../__tools__/index.js').ObserverMock<number>} */
 let observerMock;
-/** @type {import('../../lib/types.js').Subscription} */
+/** @type {import('../../lib/observable').Subscription} */
 let subscription;
 /** @type {MockFunction} */
 let nextMock;

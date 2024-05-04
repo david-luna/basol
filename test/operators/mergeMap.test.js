@@ -12,17 +12,17 @@ import { mergeMap } from '../../lib/operators/mergeMap.js';
 const observableMocks = [];
 const valuesToEmit = Array.from(Array(20)).map(() => Math.random());
 
-/** @type {(x:number) => import('../../lib/types').Observable<number>} */
+/** @type {(x:number) => import('../../lib/observable').Observable<number>} */
 const getMock = (i) => observableMocks[i].observable;
 const toMerged = mergeMap(getMock);
 
 /** @type {ObservableMockNum} */
 let sourceNumbers;
-/** @type {import('../../lib/types').Observable<number>} */
+/** @type {import('../../lib/observable').Observable<number>} */
 let mergedNumbers;
 /** @type {import('../__tools__/index.js').ObserverMock<number>} */
 let observerMock;
-/** @type {import('../../lib/types.js').Subscription} */
+/** @type {import('../../lib/observable').Subscription} */
 let subscription;
 /** @type {MockFunction} */
 let nextMock;

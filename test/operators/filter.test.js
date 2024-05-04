@@ -13,11 +13,11 @@ const toEven = filter(isEven);
 
 /** @type {import('../__tools__').ObservableMock<number>} */
 let sourceNumbers;
-/** @type {import('../../lib/types').Observable<number>} */
+/** @type {import('../../lib/observable').Observable<number>} */
 let evenNumbers;
 /** @type {import('../__tools__').ObserverMock<number>} */
 let observerMock;
-/** @type {import('../../lib/types').Subscription} */
+/** @type {import('../../lib/observable').Subscription} */
 let subscription;
 /** @type {MockFunction} */
 let nextMock;

@@ -1,15 +1,15 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "noEmit": true,
+    "declaration": true,
+    "declarationDir": "build",
+    "emitDeclarationOnly": true,
     "allowJs": true,
     "checkJs": true,
     "target": "ESNext",
-    "resolveJsonModule": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "lib": ["ES2020"]
   },
-  "include": ["./lib", "./test"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "build"]
 }

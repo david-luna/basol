@@ -13,12 +13,12 @@ let sourceNumbers;
 let sourceStrings;
 /** @type {import('../__tools__/index.js').ObservableMock<boolean>} */
 let sourceBooleans;
-/** @type {import('../../lib/types.js').Observable<number | string | boolean>} */
+/** @type {import('../../lib/observable').Observable<number | string | boolean>} */
 let mergeFromSources;
 
 /** @type {import('../__tools__/index.js').ObserverMock<number>} */
 let observerMock;
-/** @type {import('../../lib/types.js').Subscription} */
+/** @type {import('../../lib/observable').Subscription} */
 let subscription;
 /** @type {MockFunction} */
 let nextMock;

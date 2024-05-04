@@ -12,11 +12,11 @@ const lowSquaresIncluding = takeWhile((value) => Math.pow(value, 2) < 100, true)
 
 /** @type {import('../__tools__/index.js').ObservableMock<number>} */
 let sourceNumbers;
-/** @type {import('../../lib/types.js').Observable<number>} */
+/** @type {import('../../lib/observable').Observable<number>} */
 let squaresBelowhundred;
 /** @type {import('../__tools__/index.js').ObserverMock<number>} */
 let observerMock;
-/** @type {import('../../lib/types.js').Subscription} */
+/** @type {import('../../lib/observable').Subscription} */
 let subscription;
 /** @type {MockFunction} */
 let nextMock;

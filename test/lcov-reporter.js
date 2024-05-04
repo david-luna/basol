@@ -22,10 +22,17 @@ const customLcovReporter = new Transform({
     try {
       for (let i = 0; i < event.data.summary.files.length; i++) {
         const file = event.data.summary.files[i];
+
+        // We filter out the coverage report of test files
+        const relPath = relative(workingDirectory, file.path);
+        if (relPath.startsWith('test/')) {
+          continue;
+        }
+
         // For each source file referenced in the .da file, there is a section
         // containing filename and coverage data:
         // ## SF:\<path to the source file\>
-        lcov += `SF:${relative(workingDirectory, file.path)}\n`;
+        lcov += `SF:${relPath}\n`;
 
         // Following is a list of line numbers for each function name found in
         // the source file:
