@@ -15,13 +15,12 @@
   },
   "scripts": {
     "test": "node --test",
-    "test:lcov": "node --test --experimental-test-coverage --test-reporter=lcov --test-reporter-destination=test-report-lcov.info",
-    "test:junit": "node --test --test-reporter=junit --test-reporter-destination=test-report-junit.xml",
     "test:ci": "node --test --experimental-test-coverage --test-reporter=./test/lcov-reporter.js --test-reporter-destination=test-report-lcov.info",
     "lcov": "cat test-report-lcov.info | coveralls",
     "lint": "npm run lint:js && npm run lint:ts",
     "lint:js": "eslint 'lib/**/*.js' 'test/**/*.js'",
     "lint:ts": "rm -rf build && tsc && diff -ur types build/lib",
+    "lint:fix": "eslint 'lib/**/*.js' 'test/**/*.js' --fix",
     "gen:types": "rm -rf build types && tsc && mv build/lib types",
     "clean": "rm -rf build"
   },

@@ -127,4 +127,3 @@ test('combineLatest - should complete when all source observables complete', () 
   assert.strictEqual(sourceStrings.mocks.tearDown.mock.callCount(), 1);
   assert.strictEqual(sourceBooleans.mocks.tearDown.mock.callCount(), 1);
 });
-

@@ -103,7 +103,7 @@ test('mergeMap - should error from any of the projected observables', () => {
     assert.deepStrictEqual(nextMock.calls[index].arguments, [valuesToEmit[index]]);
   }
   assert.strictEqual(errorMock.callCount(), 1);
-  assert.strictEqual(errorMock.calls[0].arguments[0].message, 'explosion in projected observable')
+  assert.strictEqual(errorMock.calls[0].arguments[0].message, 'explosion in projected observable');
   assert.strictEqual(completeMock.callCount(), 0);
   assert.strictEqual(tearDownMock.callCount(), 1);
   observableMocks.forEach((obsMock) => {

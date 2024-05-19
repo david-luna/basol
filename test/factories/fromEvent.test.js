@@ -45,4 +45,3 @@ test('fromEvent - should be able to get an observable from EventTarget', () => {
   assert.strictEqual(observerMock.error.mock.callCount(), 0);
   assert.strictEqual(observerMock.complete.mock.callCount(), 0);
 });
-
