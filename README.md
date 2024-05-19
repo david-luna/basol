@@ -4,7 +4,7 @@ Basic observer library
 
 [![GitHub license](https://img.shields.io/npm/l/csset.svg)](https://github.com/david-luna/basol/blob/master/README.md)
 [![Issues](https://img.shields.io/github/issues/david-luna/basol.svg)](https://github.com/david-luna/basol/issues)
-[![Build Status](https://github.com/david-luna/basol/actions/workflows/build.yml/badge.svg)](https://github.com/david-luna/basol/actions)
+[![Build Status](https://github.com/david-luna/basol/actions/workflows/test.yml/badge.svg)](https://github.com/david-luna/basol/actions)
 [![Coverage Status](https://img.shields.io/coveralls/github/david-luna/basol)](https://coveralls.io/github/david-luna/basol)
 ![Code Size](https://img.shields.io/bundlephobia/minzip/basol.svg)
 ![Weekly downloads](https://img.shields.io/npm/dw/basol.svg)
@@ -20,9 +20,17 @@ operators do not use utils and I tried to avoid any internal dependency.
 
 ## Release notes
 
+### [0.5.0]
+
+* BREAKING CHANGE: the package has been migrated from TypeScript to
+  JavaScript + JsDocs for types. In this migration I've decided to make the
+  package ESM only so `require` would fail to load the lib. The new flag
+  `--experimental-require-module` can be used to load the lib if your app
+  is in `commonjs` format. Checkout [the docs](https://nodejs.org/docs/latest/api/modules.html#loading-ecmascript-modules-using-require).
+
 ### [0.4.0]
 
-* Fix barrel files to expose latesat operators and factories
+* Fix barrel files to expose latest operators and factories
 
 ### [0.3.0]
 
