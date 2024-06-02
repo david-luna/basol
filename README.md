@@ -27,7 +27,7 @@ operators do not use utils and I tried to avoid any internal dependency.
   package ESM only so `require` would fail to load the lib. The new flag
   `--experimental-require-module` can be used to load the lib if your app
   is in `commonjs` format. Checkout [the docs](https://nodejs.org/docs/latest/api/modules.html#loading-ecmascript-modules-using-require).
-* Add `tap` operator 
+* Add `tap` operator
 
 ### [0.4.0]
 

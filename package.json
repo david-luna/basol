@@ -21,8 +21,7 @@
     "lint:js": "eslint 'lib/**/*.js' 'test/**/*.js'",
     "lint:ts": "rm -rf build && tsc && diff -ur types build/lib",
     "lint:fix": "eslint 'lib/**/*.js' 'test/**/*.js' --fix",
-    "gen:types": "rm -rf build types && tsc && mv build/lib types",
-    "clean": "rm -rf build"
+    "gen:types": "rm -rf build types && tsc && mv build/lib types"
   },
   "repository": {
     "type": "git",
@@ -43,10 +42,10 @@
   "devDependencies": {
     "@types/node": "^20.10.0",
     "coveralls": "^3.0.11",
-    "eslint": "^8.53.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^3.4.0",
-    "prettier": "^2.2.1",
+    "eslint": "^9.0.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "prettier": "^3.0.0",
     "typescript": "^5.4.5"
   }
 }
