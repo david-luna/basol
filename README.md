@@ -20,6 +20,10 @@ operators do not use utils and I tried to avoid any internal dependency.
 
 ## Release notes
 
+### [0.5.1]
+
+* Added trusted publishing and provenance
+
 ### [0.5.0]
 
 * BREAKING CHANGE: the package has been migrated from TypeScript to
