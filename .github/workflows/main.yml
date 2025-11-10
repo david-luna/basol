@@ -4,12 +4,16 @@ on:
   push:
     tags:
       - 'v?[0-9]+.[0-9]+.[0-9]+*'
+
+permissions:
+  id-token: write # Required for OIDC and provenance (npm publish)
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
         with:
           node-version: 20
           registry-url: 'https://registry.npmjs.org'
@@ -24,6 +28,4 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: "./test-report-lcov.info"
       - name: Publish
-        uses: JS-DevTools/npm-publish@v1
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
+        run: npm publish
